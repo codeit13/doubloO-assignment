@@ -1,0 +1,206 @@
+{
+  "job_description": {
+    "title": "Full Stack Engineer (Backend)",
+    "location": null,
+    "responsibilities": [
+      "Write well-architected, tested, secure, and scalable code",
+      "Work directly on the product",
+      "Collaborate with product managers, designers, and front-end engineers to solve common goals"
+    ],
+    "required_qualifications": [
+      "Raw intellectual horsepower and ability to learn quickly",
+      "Experience contributing to open source (GitHub)",
+      "Experience working on apps that have supported 10,000+ concurrent users",
+      "Ability to design and build scalable infrastructure",
+      "Experience with real-time apps using OT or CRDT",
+      "Understanding of sound architecture principles and ability to build end-to-end",
+      "Meaningful time spent as a Senior engineer or higher",
+      "Passion for productivity tools and supporting power users"
+    ],
+    "preferred_qualifications": null,
+    "top_skills": [
+      "Full Stack Development",
+      "Scalable Infrastructure Design",
+      "Real-time Application Development",
+      "Open Source Contribution",
+      "Software Architecture Principles",
+      "Communication Skills",
+      "Data-driven Decision Making",
+      "Incremental Engineering"
+    ]
+  },
+  "resume": {
+    "personal": {
+      "name": "Sumit Chauhan",
+      "email": "sumit17me@gmail.com",
+      "phone": "+919027293112"
+    },
+    "education": [
+      {
+        "degree": "Bachelor's Degree",
+        "institution": "Birla Institute Of Applied Sciences",
+        "start_year": 2018,
+        "end_year": 2022
+      }
+    ],
+    "experience": [
+      {
+        "title": "Software Developer",
+        "company": "Mall91 - Roviri Innovations",
+        "start_date": "2022-04-01",
+        "end_date": "2022-11-30",
+        "description": "Architected a decentralized platform (rovi.money) and developed a JavaScript SDK to enable seamless crypto transactions across partner sites. Spearheaded the design and deployment of AI-driven tools\u2014powering functionalities like AI based email outreach for clients based on a RAG of the company's previous projects. Developed various apps like Chat91, a high-fidelity audio chat solution using WebRTC, socket.io, and ION-SFU for fluid, real-time conversations."
+      },
+      {
+        "title": "Software Developer",
+        "company": "Health & Glow",
+        "start_date": "2022-11-01",
+        "end_date": null,
+        "description": "Enhanced the e-commerce website by implementing new features and resolving critical bugs using React, Redux, and JavaScript within an Agile framework."
+      },
+      {
+        "title": "Software Analyst",
+        "company": "Ongraph Technologies",
+        "start_date": "2021-09-01",
+        "end_date": "2022-03-31",
+        "description": "Built a word-based game (inspired by Wordle) using VueJS and Express (Node.js) to create engaging REST APIs."
+      }
+    ],
+    "skills": [
+      "NodeJS",
+      "Python",
+      "ExpressJS",
+      "EthereumJS",
+      "Flask",
+      "FastAPI",
+      "MongoDB",
+      "VueJS",
+      "NextJS",
+      "Langchain",
+      "ChromaDB",
+      "Tailwind CSS",
+      "Docker",
+      "Nginx",
+      "Telegram Bots",
+      "AWS"
+    ],
+    "certifications": null,
+    "projects": [
+      "Converge - AI Agent",
+      "Agentic RAG Apps",
+      "Unified Payment & User-Auth Server",
+      "Web3 Wallets",
+      "Polymarket Clone"
+    ]
+  },
+  "web_research": {
+    "github_repos": [
+      "https://github.com/codeit13/webGL",
+      "https://github.com/codeit13/twitter-automation",
+      "https://github.com/codeit13/codeit13"
+    ],
+    "blogs": [
+      "https://www.linkedin.com/posts/sumit-chauhan-b1b94426_introducing-microsoft-copilot-studio-and-activity-7130715560488681472-R4Uz",
+      "https://www.linkedin.com/posts/sumit-chauhan-b1b94426_a-year-with-copilot-what-microsoft-learned-activity-7195804040713183232-PGWX"
+    ],
+    "conference_talks": [
+      "Working with Your Copilot: Unlocking Efficiency and Collaboration for the New Era of Work",
+      "Reinventing the Office Experience with AI"
+    ],
+    "social_mentions": [
+      "https://www.linkedin.com/in/sumit02",
+      "https://x.com/sumit_c?lang=en"
+    ]
+  },
+  "assessment": {
+    "fit_score": "Not a Fit",
+    "score_details": {
+      "skill_match_percentage": 28.57,
+      "experience_years": 1.5,
+      "domain_signal": "Medium"
+    },
+    "comparison_matrix": [
+      {
+        "skill": "Raw intellectual horsepower and ability to learn quickly",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Experience contributing to open source (GitHub)",
+        "required": true,
+        "candidate_has": true
+      },
+      {
+        "skill": "Experience working on apps that have supported 10,000+ concurrent users",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Ability to design and build scalable infrastructure",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Experience with real-time apps using OT or CRDT",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Understanding of sound architecture principles and ability to build end-to-end",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Meaningful time spent as a Senior engineer or higher",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Passion for productivity tools and supporting power users",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Full Stack Development",
+        "required": true,
+        "candidate_has": true
+      },
+      {
+        "skill": "Scalable Infrastructure Design",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Real-time Application Development",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Open Source Contribution",
+        "required": true,
+        "candidate_has": true
+      },
+      {
+        "skill": "Software Architecture Principles",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Communication Skills",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Data-driven Decision Making",
+        "required": true,
+        "candidate_has": false
+      },
+      {
+        "skill": "Incremental Engineering",
+        "required": true,
+        "candidate_has": false
+      }
+    ],
+    "reasoning": "The candidate, Sumit Chauhan, shows some relevant skills in full-stack development and has contributed to open source projects, which is a positive aspect. However, he lacks critical experience in working with apps that support 10,000+ concurrent users, designing scalable infrastructure, and has not demonstrated experience with real-time applications using OT or CRDT. Additionally, he does not meet the requirement for meaningful time spent as a Senior engineer or higher, nor does he show a clear passion for productivity tools and supporting power users. Overall, while he has some relevant skills, the lack of key required qualifications leads to a conclusion that he is not a fit for the role."
+  }
+}

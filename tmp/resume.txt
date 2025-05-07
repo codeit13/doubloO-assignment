@@ -1,0 +1,75 @@
+Sumit Chauhan 
+| Software Developer | 
+Phone Number 
++919027293112 
+WORK EXPERIENCE  ( 3.7 Years ) 
+Mall91 - Roviri Innovations  ( Software Developer) 
+●  Web3 Initiatives: Architected a decentralized platform (rovi.money) and developed a 
+JavaScript SDK to enable seamless crypto transactions across partner sites 
+●  AI Integrations: Spearheaded the design and deployment of AI‑driven 
+● 
+Email Address 
+sumit17me@gmail.com 
+tools—powering functionalities like AI based email outreach for clients based on a 
+RAG of the company 's previous projects. , 
+Developed various apps like Chat91, a high‑fidelity audio chat solution using 
+WebRTC, socket.io, and ION‑SFU for fluid, real‑time conversations. 
+Health & Glow  ( Software Developer) 
+Linkedin 
+(Nov 2022 - Present) –  2.5 Years 
+(Apr 2022 - Nov 2022) –  8 Months 
+●  Enhanced the e‑commerce website by implementing new features and resolving 
+linkedin.com/in/sumit02 
+Github 
+critical bugs using React, Redux, and JavaScript within an Agile framework 
+github.com/codeit13 
+Ongraph Technologies  (Software Analyst) 
+(Sep 2021 - Mar 2022) –  7 Months 
+●  Built a word‑based game (inspired by Wordle) using VueJS and Express (Node.js) to 
+create engaging REST APIs 
+SKILLS 
+NodeJS Python PROJECTS 
+ExperssJS EthereumJS Flask FastAPI NodeJS MongoDB VueJS NextJS Converge - AI Agent 
+Github |  Link 
+●  Tech: Python ( FastAPI ),  MongoDB ,  VueJS , TailwindCSS , Shadcn , Docker 
+●  Developed a chat-like UI interface for an AI agent, that uses various MCP Servers 
+to publish 1 SEO ready article daily on my blog . 
+Langchain AI ChromaDB Tailwind CSS Telegram Bots LangChain AWS Docker Nginx 
+EDUCATION 
+Birla Institute Of 
+Applied Sciences 
+(Aug 2018 - 2022) 
+Percentage 
+77.95 % 
+LANGUAGES 
+English 
+Proficient 
+Hindi 
+Native 
+Agentic RAG Apps 
+●  Tech: Python ( Flask ), LangGraph , MySQL , LangChain , ChromaDB 
+●  Created AI‑driven workflows for CRM to optimise sales, marketing, onboarding 
+and client follow ups. 
+Unified Payment & User-Auth Server 
+Github |  Link 
+●  Tech: NodeJS  (E  xpress ), MongoDB, PassportJS, Docker, 
+●  Built a unified user-auth server to accelerate MVP development, featuring 
+email/password and Google sign-in , and Razorpay for secure payments 
+●  Has a  Vue.js starter app with built-in user-auth &, Payment APIs , and a 
+ready-to-use App UI for MVP’s. 
+●  Deployed fully using Docker containers on AWS EC2 instance 
+Web3 Wallets 
+●  Tech: NodeJS ,  EthereumJS ,  L2 (Boba Network) ,  Biconomy, TON Blockchain 
+●  Developed secure Web3 wallets and signed Ethereum transactions using user 
+private keys, while enabling gasless transfers via Biconomy 
+●  Used Algo’s like  Shamir’s Secret Sharing to split and encrypt private keys into 3 
+fragments (Google sub, user PIN, and security question) for secure backend storage 
+●  Integrated smart contract methods using contract’s RPC and built RESTful APIs for 
+streamlined transaction processing 
+Polymarket Clone 
+Link 
+●  Tech: NodeJS (E  xpress ), TypeScript , MongoDB, Shadcn, TailwindCSS 
+●  Built a polymarket.com clone using their Clob & Gamma market API’s . 
+●  A Decentralized prediction market platform where users can bet on the outcome 
+of various future events , including elections, sports, and economic indicators , 
+using cryptocurrency 

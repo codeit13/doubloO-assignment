@@ -1,0 +1,41 @@
+Fireflies.ai is the #1 AI voice assistant -- automating note-taking, making meetings searchable, and turning voice into action & insights. It integrates into Zoom, Google Meet, and all major web-conferencing platforms. Fireflies is trusted by over 20M users across 500k+ companies worldwide. This year, Ramp recognized Fireflies as the 6th most popular AI platform behind OpenAI, Midjourney and Anthropic. Chances are you’ve seen Fireflies in one of your meetings!
+
+As a Full Stack Engineer( Backend), you'll be expected to work directly on our product. We expect you to write well-architected, tested, secure, and scalable code as part of a team of a few other engineers. You'll have a lot of autonomy over your schedule and you'll work together with product managers, designers, and front-end engineers to solve common goals.
+
+We value your skills and abilities more than your resume. Here's what we look for:
+
+Qualities we look for:
+
+You have the raw intellectual horsepower and the ability to learn quickly
+You contribute to open source (share your GitHub)
+You have experience working on apps that have supported 10,000+ concurrent users
+You can design and build scalable infrastructure
+You have experience with real-time apps that use something like OT or CRDT (ref)
+You understand sound architecture principles and can build end-to-end
+Meaningful time spent as a Senior engineer or higher
+Passion for productivity tools and supporting power users
+
+
+Values that are important to us:
+
+You should be a great communicator and culture maintainer.
+Take a look at our culture document
+You're data-driven and customer-focused
+You value fast & incremental engineering cycles
+You maintain design excellence and minimize complexity
+You measure your results & automate when possible
+You get 10% better at something every week
+You have an internal compass and take accountability & initiative
+We value overcommunication, candid feedback and a results-driven culture
+
+Perks and benefits :
+
+Competitive compensation
+Work remotely from anywhere
+Opportunities to move laterally within a team and grow rapidly
+Paid time off and flexible leave policy
+A "no boss" culture that empowers you to take ownership
+Flexible working hours to fit your lifestyle
+LGBTQ+ friendly
+Fun international offsite to connect and recharge
+Tech reimbursements to support your work
