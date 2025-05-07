@@ -14,6 +14,11 @@ class Settings(BaseSettings):
     TWITTER_USER_AGENT: str
     SCRAPER_API_KEY: str
 
+    LANGSMITH_TRACING: bool
+    LANGSMITH_ENDPOINT: str
+    LANGSMITH_API_KEY: str
+    LANGSMITH_PROJECT: str
+
     class Config:
         env_file = ".env"
 

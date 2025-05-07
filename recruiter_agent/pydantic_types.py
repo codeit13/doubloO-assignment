@@ -1,6 +1,6 @@
 from datetime import date
 from pydantic import BaseModel, Field, EmailStr, HttpUrl
-from typing import Optional, List
+from typing import Optional, List, Union
 
 # ── 1. Job Description
 
@@ -24,6 +24,8 @@ class Personal(BaseModel):
     name: str = Field(..., description="Candidate full name")
     email: Optional[str] = Field(None, description="Email address")
     phone: Optional[str] = Field(None, description="Contact number")
+    work_experience: Optional[float] = Field(
+        None, description="Years of work experience")
 
 
 class EducationEntry(BaseModel):
@@ -41,6 +43,7 @@ class ExperienceEntry(BaseModel):
     end_date: Optional[str] = Field(
         None, description="End date in YYYY-MM-DD format")
     description: Optional[str] = Field(None, description="Brief summary")
+    location: Optional[str] = Field(None, description="Location")
 
 
 class Resume(BaseModel):
@@ -59,26 +62,36 @@ class Resume(BaseModel):
 
 class GitHubRepo(BaseModel):
     name: str = Field(..., description="Repository name")
-    url: HttpUrl = Field(..., description="Repo URL")
+    url: str = Field(..., description="Repo URL")
+    description: Optional[str] = Field(
+        None, description="Repository description")
+    stars: Optional[int] = Field(None, description="Number of stars")
+    last_updated: Optional[str] = Field(None, description="Last update date")
 
 
 class BlogEntry(BaseModel):
     title: str = Field(..., description="Blog post title")
-    url: HttpUrl = Field(..., description="Post URL")
-    published_date: Optional[date] = Field(
-        None, description="Publication date")
+    url: str = Field(..., description="Post URL")
+    published_date: Optional[str] = Field(None, description="Publication date")
+    platform: Optional[str] = Field(None, description="Blog platform")
+    summary: Optional[str] = Field(
+        None, description="Brief summary of content")
 
 
 class ConferenceTalk(BaseModel):
     title: str = Field(..., description="Talk title")
     event: Optional[str] = Field(None, description="Conference name")
     year: Optional[int] = Field(None, description="Year of talk")
+    url: Optional[str] = Field(None, description="URL to talk or event")
+    description: Optional[str] = Field(None, description="Talk description")
 
 
 class SocialMention(BaseModel):
     platform: str = Field(..., description="Social platform")
-    url: HttpUrl = Field(..., description="Mention URL")
+    url: str = Field(..., description="Mention URL")
     context_snippet: Optional[str] = Field(None, description="Excerpt")
+    date: Optional[str] = Field(None, description="Date of mention")
+    username: Optional[str] = Field(None, description="Username on platform")
 
 
 class WebResearch(BaseModel):

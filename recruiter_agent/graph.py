@@ -1,5 +1,5 @@
 from ast import List
-from typing import Annotated, TypedDict
+from typing import Annotated, TypedDict, Any
 from langchain_core.messages import AnyMessage
 import urllib
 from recruiter_agent.nodes import parse_jd_node, parse_resume_node, web_research_node, fit_score_node
@@ -42,6 +42,7 @@ def create_graph():
         resume_text: str
         jd_structured: JobDescription
         resume_structured: Resume
+        extracted_urls: Any
         web_structured: WebResearch
         fit_assessment: FitAssessment
 
@@ -85,9 +86,23 @@ def extract_text_from_pdf(file_path: str) -> str:
     try:
         reader = PdfReader(file_path)
         text = ""
+        links = []
+
         for page in reader.pages:
             text += page.extract_text() + "\n"
-        return text
+
+            if "/Annots" in page:
+                for annot in page["/Annots"]:
+                    obj = annot.get_object()
+                    if obj.get("/Subtype") == "/Link":
+                        # Get URI if it's a URI action
+                        if "/A" in obj and "/URI" in obj["/A"]:
+                            uri = obj["/A"]["/URI"]
+                            # Optionally, use rectangle coordinates to find link text (advanced)
+                            links.append(uri)
+
+        return text + "\n\nLinks:\n" + "\n".join(links)
+
     except Exception as e:
         print(f"Error extracting text from PDF: {str(e)}")
         return ""
