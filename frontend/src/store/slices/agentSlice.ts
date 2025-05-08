@@ -2,6 +2,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 
+// API URL configuration based on environment
+const API_BASE_URL = import.meta.env.VITE_NODE_ENV === 'production' 
+  ? 'https://recruiter-backend.sleebit.com' 
+  : 'http://localhost:8005';
+
+// Alternative approach using direct environment variable
+// const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+
 interface Education {
   degree: string;
   institution: string;
@@ -90,7 +98,7 @@ const initialState: AgentState = {
 export const fetchAgentRuns = createAsyncThunk(
   'agent/fetchRuns',
   async (limit: number = 5) => {
-    const response = await fetch(`http://localhost:8001/runs/?limit=${limit}`);
+    const response = await fetch(`${API_BASE_URL}/runs/?limit=${limit}`);
     if (!response.ok) {
       throw new Error('Failed to fetch agent runs');
     }
@@ -102,7 +110,7 @@ export const runAgent = createAsyncThunk(
   'agent/runAgent',
   async (formData: FormData, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8001/run-agent/', {
+      const response = await fetch(`${API_BASE_URL}/run-agent/`, {
         method: 'POST',
         body: formData,
       });
@@ -137,8 +145,7 @@ export const pollTaskStatus = createAsyncThunk<any, { taskId: string, attempt?: 
         return null;
       }
       
-      const API_URL = 'http://localhost:8001';
-      const response = await fetch(`${API_URL}/task/${taskId}`);
+      const response = await fetch(`${API_BASE_URL}/task/${taskId}`);
       
       if (!response.ok) {
         // Try to get detailed error message from the response
