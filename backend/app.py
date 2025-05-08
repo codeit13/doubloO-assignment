@@ -22,7 +22,7 @@ app = FastAPI(title="Recruiter Agent API", version="1.0.0", lifespan=lifespan)
 # Configure CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Frontend URL
+    allow_origins=["http://localhost:5173", "https://recruiter.sleebit.com"],  # Frontend URL
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods
     allow_headers=["*"],  # Allow all headers
