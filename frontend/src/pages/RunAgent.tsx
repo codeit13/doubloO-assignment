@@ -409,7 +409,7 @@ export default function RunAgent() {
               </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Resume Card */}
-          <Card className="overflow-hidden border border-teal-700 bg-gradient-to-b from-teal-900/10 to-transparent backdrop-blur-sm hover:shadow-[0_0_15px_rgba(0,173,173,0.3)] transition-all duration-300">
+          <Card className="overflow-hidden border border-teal-700/10 bg-gradient-to-b from-teal-900/10 to-transparent backdrop-blur-sm hover:shadow-[0_0_15px_rgba(0,173,173,0.3)] transition-all duration-300">
             <CardHeader className="border-b border-teal-700/30">
               <CardTitle className="flex items-center gap-2 text-teal-100">
                 <div className="bg-teal-700/30 p-1.5 rounded-md">
@@ -496,7 +496,7 @@ export default function RunAgent() {
           </Card>
          
           {/* Job Description Card - Spans full width */}
-          <Card className="overflow-hidden bg-gradient-to-b from-teal-900/10 to-transparent backdrop-blur-sm hover:shadow-[0_0_15px_rgba(0,173,173,0.3)] transition-all duration-300">
+          <Card className="overflow-hidden border-teal-700/10 bg-gradient-to-b from-teal-900/10 to-transparent backdrop-blur-sm hover:shadow-[0_0_15px_rgba(0,173,173,0.3)] transition-all duration-300">
             <CardHeader className="border-b border-teal-700/30">
               <CardTitle className="flex items-center gap-2 text-teal-100">
                 <div className="bg-teal-700/30 p-1.5 rounded-md">
