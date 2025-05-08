@@ -70,14 +70,15 @@ interface AgentRun {
   output: AgentRunOutput;
 }
 
-interface TaskStatus {
+export interface TaskStatus {
   task_id: string;
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'retrying';
   created_at: string;
   updated_at: string;
   result?: any;
   error?: string;
   agent_run_id?: string;
+  attempt?: number; // Added for retry tracking
 }
 
 interface AgentState {
@@ -148,53 +149,115 @@ export const pollTaskStatus = createAsyncThunk<any, { taskId: string, attempt?: 
         return null;
       }
       
-      const response = await fetch(`${API_BASE_URL}/task/${taskId}`);
+      // Add a timeout to the fetch request to avoid hanging indefinitely
+      const controller = new AbortController();
+      // Increase timeout to 30 seconds to avoid premature aborts
+      const timeoutId = setTimeout(() => {
+        console.log(`Request timeout reached after 30 seconds, aborting request for task ${taskId}`);
+        controller.abort();
+      }, 30000); // 30 second timeout
       
-      if (!response.ok) {
-        // Try to get detailed error message from the response
-        const errorData = await response.json();
-        return rejectWithValue(errorData.detail || 'Failed to poll task status');
-      }
-      
-      const taskStatus = await response.json();
-      dispatch(setCurrentTask(taskStatus));
-      
-      // If the task is completed or failed, stop polling
-      if (taskStatus.status === 'completed' || taskStatus.status === 'failed') {
-        dispatch(setPollingActive(false));
+      try {
+        const response = await fetch(`${API_BASE_URL}/task/${taskId}`, {
+          signal: controller.signal
+        });
         
-        // If completed and has result, fetch the latest runs to update the UI
-        if (taskStatus.status === 'completed' && taskStatus.result) {
-          dispatch(fetchAgentRuns(10));
+        // Clear the timeout since the request completed
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          // Handle specific HTTP error codes
+          if (response.status === 504) {
+            console.warn(`Gateway timeout (504) encountered on attempt ${attempt}, retrying...`);
+            // Don't try to parse JSON for 504 errors, just retry
+            throw new Error('Gateway timeout');
+          }
+          
+          // For other errors, try to get detailed error message from the response
+          try {
+            const errorData = await response.json();
+            // Instead of rejecting, throw an error to trigger retry
+            throw new Error(errorData.detail || `Failed to poll task status: ${response.status}`);
+          } catch (jsonError) {
+            // If we can't parse JSON, just throw the original error
+            throw new Error(`HTTP error ${response.status} while polling task status`);
+          }
         }
+        
+        const taskStatus = await response.json();
+        dispatch(setCurrentTask(taskStatus));
+        
+        // If the task is completed or failed, stop polling
+        if (taskStatus.status === 'completed' || taskStatus.status === 'failed') {
+          dispatch(setPollingActive(false));
+          
+          // If completed and has result, fetch the latest runs to update the UI
+          if (taskStatus.status === 'completed' && taskStatus.result) {
+            dispatch(fetchAgentRuns(10));
+          }
+          return taskStatus;
+        }
+        
+        // Adjust polling frequency based on task status
+        // If task is running, poll more frequently than if it's still pending
+        const nextDelay = taskStatus.status === 'running' ? delay / 2 : delay;
+        
+        // Schedule the next poll with increasing delay if task is still pending/running
+        setTimeout(() => {
+          if (getState().agent.pollingActive) {
+            dispatch(pollTaskStatus({ 
+              taskId, 
+              // Increment attempt counter more slowly for running tasks
+              attempt: taskStatus.status === 'running' ? attempt + 0.5 : attempt + 1 
+            }));
+          }
+        }, nextDelay);
+        
         return taskStatus;
+      } catch (fetchError) {
+        // Clear the timeout to prevent memory leaks
+        clearTimeout(timeoutId);
+        throw fetchError; // Re-throw to be caught by the outer catch block
+      }
+    } catch (error: unknown) {
+      console.error('Error polling task status:', error);
+      
+      // Log specific error types for debugging purposes
+      if (error instanceof Error) {
+        if (error.name === 'AbortError' || error.message.includes('abort')) {
+          console.log(`Request for task ${taskId} was aborted due to timeout. Will retry.`);
+        } else if (error instanceof TypeError) {
+          console.log(`Network error for task ${taskId}: ${error.message}. Will retry.`);
+        } else if (error.message.includes('Gateway timeout')) {
+          console.log(`Gateway timeout for task ${taskId}: ${error.message}. Will retry.`);
+        } else {
+          console.log(`Error for task ${taskId}: ${error.message}. Will retry.`);
+        }
+      } else {
+        console.log(`Unexpected non-Error object for task ${taskId}. Will retry.`);
       }
       
-      // Adjust polling frequency based on task status
-      // If task is running, poll more frequently than if it's still pending
-      const nextDelay = taskStatus.status === 'running' ? delay / 2 : delay;
-      
-      // Schedule the next poll with increasing delay if task is still pending/running
-      setTimeout(() => {
-        if (getState().agent.pollingActive) {
-          dispatch(pollTaskStatus({ 
-            taskId, 
-            // Increment attempt counter more slowly for running tasks
-            attempt: taskStatus.status === 'running' ? attempt + 0.5 : attempt + 1 
-          }));
-        }
-      }, nextDelay);
-      
-      return taskStatus;
-    } catch (error) {
-      console.error('Error polling task status:', error);
-      // Don't stop polling on network errors, just retry with backoff
+      // ALWAYS retry as long as polling is active, regardless of error type
       if (getState().agent.pollingActive) {
+        // Log retry attempt with proper error message handling
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.log(`Retrying poll attempt ${attempt} after error: ${errorMessage}`);
+        
+        // Calculate backoff delay with jitter to prevent thundering herd
+        const jitter = Math.random() * 1000; // Add up to 1 second of random jitter
+        // Cap the max delay at 30 seconds to prevent extremely long waits
+        const retryDelay = Math.min(Math.pow(2, attempt) * 1000, 30000) + jitter;
+        
         setTimeout(() => {
           dispatch(pollTaskStatus({ taskId, attempt: attempt + 1 }));
-        }, Math.min(Math.pow(2, attempt) * 1000, 30000));
+        }, retryDelay);
+        
+        // Return a special value to indicate we're retrying
+        return { status: 'retrying', task_id: taskId, attempt };
       }
-      return rejectWithValue('Failed to poll task status');
+      
+      // For other errors or if polling is inactive, reject with error message
+      return rejectWithValue(error instanceof Error ? error.message : 'Failed to poll task status');
     }
   }
 );

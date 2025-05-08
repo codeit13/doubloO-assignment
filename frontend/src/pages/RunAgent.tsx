@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { runAgent, pollTaskStatus, setPollingActive } from "../store/slices/agentSlice";
 import type { AppDispatch, RootState, AgentState } from "../store";
+// Import TaskStatus type to ensure proper type checking
+import type { TaskStatus } from "../store/slices/agentSlice";
 import { cn } from "../lib/utils";
 
 // Helper function to get the color class based on score percentage
@@ -117,7 +119,10 @@ export default function RunAgent() {
   const getStatusMessage = () => {
     if (!currentTask) return "";
     
-    switch (currentTask.status) {
+    // Use type assertion to handle the 'retrying' status
+    const status = currentTask.status as string;
+    
+    switch (status) {
       case "pending":
         return "Preparing to analyze resume and job description...";
       case "running":
@@ -126,8 +131,30 @@ export default function RunAgent() {
         return "Analysis completed! Redirecting to results...";
       case "failed":
         return `Error: ${currentTask.error || "Unknown error occurred"}`;  
+      case "retrying":
+        // Use optional chaining and nullish coalescing for safe access
+        return `Connection issue detected. Retrying... (Attempt ${(currentTask as any).attempt || 1})`;  
       default:
         return "Processing...";
+    }
+  };
+  
+  // Get color class based on task status
+  const getStatusColorClass = () => {
+    if (!currentTask) return "";
+    
+    // Use type assertion to handle the 'retrying' status
+    const status = currentTask.status as string;
+    
+    switch (status) {
+      case "completed":
+        return "text-green-500";
+      case "failed":
+        return "text-red-500";
+      case "retrying":
+        return "text-amber-500";
+      default:
+        return "text-teal-500";
     }
   };
   
@@ -557,7 +584,7 @@ export default function RunAgent() {
         </div>
 
         {/* Submit Button Card */}
-        <Card className="mt-6 overflow-hidden border border-teal-700 bg-gradient-to-r from-teal-900 to-teal-800 shadow-lg transition-all duration-300 relative">
+        <Card className="mt-6 overflow-hidden border border-teal-700 bg-gradient-to-b from-teal-900/20 to-teal-800/40 shadow-lg transition-all duration-300 relative">
           <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.8))] opacity-20"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
@@ -569,7 +596,7 @@ export default function RunAgent() {
                 <p className="text-sm text-teal-100">
                   Our AI agent will analyze the resume against the job description to evaluate candidate fit.
                 </p>
-                <div className="flex items-center gap-4 text-xs text-teal-300">
+                <div className="hidden md:flex items-center gap-4 text-xs text-teal-300">
                   <div className="flex items-center gap-1.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-teal-400 animate-pulse"></div>
                     <span>Intelligent matching</span>
@@ -621,36 +648,44 @@ export default function RunAgent() {
             {currentTask && (
               <div className="mt-4 p-4 border border-teal-200 rounded-lg bg-teal-50 dark:bg-teal-900/20 dark:border-teal-800">
                 <div className="flex items-center">
-                  {loading ? (
-                    <Loader2 className="mr-2 h-5 w-5 text-teal-600 dark:text-teal-400 animate-spin" />
-                  ) : currentTask.status === 'completed' ? (
+                  {/* Use type assertion to handle the 'retrying' status */}
+                  {(currentTask.status as string) === 'completed' ? (
                     <CheckCircle2 className="mr-2 h-5 w-5 text-green-500" />
-                  ) : currentTask.status === 'failed' ? (
+                  ) : (currentTask.status as string) === 'failed' ? (
                     <XCircle className="mr-2 h-5 w-5 text-red-500" />
+                  ) : (currentTask.status as string) === 'retrying' ? (
+                    <Loader2 className={`mr-2 h-5 w-5 ${getStatusColorClass()} animate-spin`} />
                   ) : (
-                    <Clock className="mr-2 h-5 w-5 text-amber-500" />
+                    <Loader2 className="mr-2 h-5 w-5 text-teal-500 animate-spin" />
                   )}
-                  <div className="font-medium text-teal-800 dark:text-teal-200">
-                    Task Status: {currentTask?.status || 'pending'}
+                  <div className={`font-medium text-teal-800 dark:text-teal-200 ${getStatusColorClass()}`}>
+                    Task Status: {(currentTask.status as string).charAt(0).toUpperCase() + (currentTask.status as string).slice(1)}
                   </div>
                 </div>
                 <p className="mt-2 text-sm text-teal-600 dark:text-teal-300">{getStatusMessage()}</p>
+                <p className="mt-1 text-xs text-teal-500 dark:text-teal-400">Task ID: {currentTask.task_id}</p>
+                
+                {/* Show additional info for retrying state */}
+                {(currentTask.status as string) === 'retrying' && (
+                  <div className="mt-2 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded border border-amber-200 dark:border-amber-800">
+                    <p>Network issue detected. Automatically retrying connection to the server...</p>
+                  </div>
+                )}
                 
                 {/* Animated Random Progress Bar */}
-                {loading && currentTask?.status !== 'completed' && (
+                {((currentTask.status as string) === 'pending' || (currentTask.status as string) === 'running' || (currentTask.status as string) === 'retrying') && (
                   <div className="mt-2">
-                    <RandomProgressBar status={currentTask?.status || 'pending'} />
+                    <RandomProgressBar status={(currentTask.status as string) === 'retrying' ? 'pending' : currentTask.status} />
                   </div>
                 )}
                 
                 {/* Static Progress Bar for completed tasks */}
-                {(!loading || currentTask?.status === 'completed') && (
+                {(currentTask.status === 'completed') && (
                   <Progress 
                     className="mt-2 h-1" 
-                    value={currentTask?.status === 'completed' ? 100 : currentTask?.status === 'running' ? 60 : 30} 
+                    value={100} 
                   />
                 )}
-                <p className="mt-2 text-xs text-teal-500 dark:text-teal-400">Task ID: {currentTask?.task_id}</p>
                 
                 {/* Show results when task is completed */}
                 {currentTask.status === 'completed' && currentTask.result && (

@@ -19,13 +19,14 @@ A modern recruiting assistant that analyzes job descriptions and candidate resum
 ## UI Screenshots
 
 ### Candidate Analysis Form
-![Analysis Form](tmp/analysis-form.png)
+![Analysis Form](backend/tmp/analysis-form.png)
 
 ### Fit Assessment Results
-![Fit Assessment](tmp/fit-assessment.png)
+![Form Submit](backend/tmp/form-submit.png)
+![Fit Assessment](backend/tmp/fit-assessment.png)
 
 ### Candidates List
-![Candidates List](tmp/candidates-list.png)
+![Candidates List](backend/tmp/candidates-list.png)
 
 ---
 
