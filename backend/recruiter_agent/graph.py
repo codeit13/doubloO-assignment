@@ -13,27 +13,6 @@ import argparse
 import time
 import json
 
-
-# def create_graph():
-#     """Create the LangGraph for the recruiting assistant."""
-#     graph = StateGraph()
-
-#     # Add nodes to the graph
-#     graph.add_node(parse_jd_node)
-#     graph.add_node(parse_resume_node)
-#     graph.add_node(web_research_node)
-#     graph.add_node(fit_score_node)
-
-#     # Add edges to connect the nodes
-#     graph.add_edge(START, parse_jd_node)
-#     graph.add_edge(START, parse_resume_node)
-#     graph.add_edge(parse_jd_node, web_research_node)
-#     graph.add_edge(web_research_node, fit_score_node)
-#     graph.add_edge(parse_resume_node, fit_score_node)
-#     graph.add_edge(fit_score_node, END)
-
-#     return graph
-
 def create_graph():
     class State(TypedDict):
         """State definition for the recruitment agent graph"""

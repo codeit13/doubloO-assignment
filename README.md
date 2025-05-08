@@ -1,13 +1,91 @@
 # AI Recruiting Assistant
 
-A LangGraph-powered recruiting assistant that analyzes job descriptions and candidate resumes, performs web research, and provides fit assessments.
+A LangGraph-powered recruiting assistant that analyzes job descriptions and candidate resumes, performs web research, and provides fit assessments. Includes a modular FastAPI backend and CLI for flexible usage.
 
-## Features
+---
 
-- **Job Description Analysis**: Extracts key requirements, responsibilities, and skills.
-- **Resume Parsing**: Extracts education, experience, skills, and other qualifications.
-- **Web Research**: Searches for candidate information including GitHub, blogs, conference talks, and social mentions.
-- **Fit Assessment**: Compares candidate qualifications against job requirements with detailed scoring.
+## Recruiter AI Agent Graph
+
+The recruiter agent's workflow is orchestrated as a graph of nodes, each responsible for a step in the candidate-job matching process. The diagram below illustrates how nodes interact:
+
+![Recruiter Agent Graph](tmp/graph.png)
+
+---
+
+## How the Recruiter AI Agent Works
+
+The recruiter agent follows these steps:
+
+1. **JDParser**: Analyzes the job description, extracting structured requirements, responsibilities, and skills.
+2. **ResumeParser**: Parses the candidate's resume to extract education, experience, and skills.
+3. **WebResearcher**: Searches the web for additional candidate information (e.g., GitHub, blogs, talks).
+4. **FitScorer**: Compares the candidate's profile with the job requirements and generates a detailed fit assessment, including a score and reasoning.
+
+Each node is implemented as a function and orchestrated using LangGraph, allowing for extensible and transparent workflows.
+
+---
+
+## API Endpoints (FastAPI)
+
+The backend exposes the following endpoints (see `api/agent.py`):
+
+### `POST /run-agent/`
+Run the recruiter agent on a candidate and job description.
+
+**Request:** `multipart/form-data`
+- `candidate_name`: string
+- `resume`: file (PDF, DOCX, or TXT)
+- `job_description`: file (PDF, DOCX, or TXT)
+
+**Example cURL:**
+```bash
+curl -X POST "http://localhost:8001/run-agent/" \
+  -F "candidate_name=Sumit Chauhan" \
+  -F "resume=@tmp/resume.pdf" \
+  -F "job_description=@tmp/job_description.txt"
+```
+
+**Response:**
+```json
+{
+  "fit_score": "Moderate Fit",
+  "score_details": { ... },
+  "comparison_matrix": [ ... ],
+  "reasoning": "..."
+}
+```
+
+### `GET /runs/?limit=N`
+Fetch the latest N recruiter agent runs from the database (default: 10, max: 100).
+
+**Example cURL:**
+```bash
+curl "http://localhost:8001/runs/?limit=5"
+```
+
+**Response:**
+```json
+[
+  {
+    "timestamp": "2025-05-08T00:12:58.123Z",
+    "input": { ... },
+    "output": { ... }
+  },
+  ...
+]
+```
+
+---
+
+## Command Line Interface
+
+You can also run the recruiter agent from the command line:
+
+```bash
+python -m recruiter_agent.graph --candidate-name "Sumit Chauhan" --resume tmp/resume.pdf --job-description tmp/job_description.txt
+```
+
+---
 
 ## Architecture
 
