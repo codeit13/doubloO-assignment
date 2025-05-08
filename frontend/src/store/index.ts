@@ -40,6 +40,7 @@ export interface ResumeStructured {
   personal: Personal;
   education: Education[];
   experience: Experience[];
+  skills_list?: string[];
 }
 
 export interface JDStructured {
@@ -62,6 +63,11 @@ export interface AgentRunOutput {
   resume_structured: ResumeStructured;
   web_structured?: any;
   fit_assessment?: any;
+  candidate_analysis?: {
+    summary?: string;
+    strengths?: string[];
+    weaknesses?: string[];
+  };
 }
 
 export interface AgentRun {

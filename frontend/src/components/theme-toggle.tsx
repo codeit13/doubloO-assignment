@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setThemeMode } from "../store/slices/themeSlice";
 
 export function ThemeToggle() {
-  const { resolvedTheme, theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const dispatch = useDispatch();
   

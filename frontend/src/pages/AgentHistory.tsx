@@ -4,9 +4,9 @@ import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Avatar, AvatarFallback } from "../components/ui/avatar";
-import { Loader2, RefreshCw, ChevronDown, ChevronUp, CheckCircle2, XCircle, Clock, Award, Briefcase, GraduationCap, User } from "lucide-react";
-import { fetchAgentRuns, setCurrentRun } from "../store/slices/agentSlice";
-import type { AppDispatch, RootState, AgentState, AgentRun } from "../store";
+import { Loader2, RefreshCw, CheckCircle2, XCircle, Clock, Award, Briefcase, GraduationCap, User } from "lucide-react";
+import { fetchAgentRuns } from "../store/slices/agentSlice";
+import type { AppDispatch, RootState, AgentRun } from "../store";
 import { Badge } from "../components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";
 import { Progress } from "../components/ui/progress";
@@ -154,10 +154,9 @@ export default function AgentHistory() {
                                 </div>
                                 <Progress 
                                   value={matchScore} 
-                                  className="h-2" 
-                                  indicatorClassName={cn(
-                                    matchScore >= 80 ? "bg-green-500" :
-                                    matchScore >= 60 ? "bg-amber-500" : "bg-red-500"
+                                  className={cn("h-2",
+                                    matchScore >= 80 ? "[&>div]:bg-green-500" :
+                                    matchScore >= 60 ? "[&>div]:bg-amber-500" : "[&>div]:bg-red-500"
                                   )}
                                 />
                                 
@@ -329,11 +328,11 @@ export default function AgentHistory() {
                           </CardHeader>
                           <CardContent>
                             <div className="space-y-4">
-                              {run.output?.resume_structured?.skills && (
+                              {run.output?.resume_structured?.skills_list && (
                                 <div>
                                   <h5 className="text-sm font-medium mb-2">Skills</h5>
                                   <div className="flex flex-wrap gap-1.5">
-                                    {run.output.resume_structured.skills.map((skill: string, i: number) => (
+                                    {run.output.resume_structured.skills_list.map((skill: string, i: number) => (
                                       <Badge key={i} variant="secondary" className="text-xs">
                                         {skill}
                                       </Badge>
@@ -395,20 +394,20 @@ export default function AgentHistory() {
                       </div>
                       
                       {/* Analysis Section */}
-                      {run.output?.analysis && (
+                      {run.output?.candidate_analysis?.summary && (
                         <Card>
                           <CardHeader className="pb-2">
                             <CardTitle className="text-base">Analysis</CardTitle>
                           </CardHeader>
                           <CardContent>
                             <div className="space-y-2">
-                              <p className="text-sm whitespace-pre-line">{run.output.analysis}</p>
+                              <p className="text-sm whitespace-pre-line">{run.output.candidate_analysis.summary}</p>
                               
-                              {run.output.strengths && (
+                              {run.output.candidate_analysis.strengths && (
                                 <div className="mt-4">
                                   <h5 className="text-sm font-medium mb-2">Strengths</h5>
                                   <ul className="space-y-1">
-                                    {run.output.strengths.map((strength: string, i: number) => (
+                                    {run.output.candidate_analysis.strengths.map((strength: string, i: number) => (
                                       <li key={i} className="text-sm flex items-start">
                                         <div className="mr-2 mt-0.5 text-green-500">
                                           <CheckCircle2 className="h-3.5 w-3.5" />
@@ -420,11 +419,11 @@ export default function AgentHistory() {
                                 </div>
                               )}
                               
-                              {run.output.weaknesses && (
+                              {run.output.candidate_analysis.weaknesses && (
                                 <div className="mt-4">
                                   <h5 className="text-sm font-medium mb-2">Areas for Improvement</h5>
                                   <ul className="space-y-1">
-                                    {run.output.weaknesses.map((weakness: string, i: number) => (
+                                    {run.output.candidate_analysis.weaknesses.map((weakness: string, i: number) => (
                                       <li key={i} className="text-sm flex items-start">
                                         <div className="mr-2 mt-0.5 text-red-500">
                                           <XCircle className="h-3.5 w-3.5" />
