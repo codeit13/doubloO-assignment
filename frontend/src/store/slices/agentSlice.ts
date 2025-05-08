@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../index';
 
 interface Education {
   degree: string;
@@ -58,11 +59,23 @@ interface AgentRun {
   output: AgentRunOutput;
 }
 
+interface TaskStatus {
+  task_id: string;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+  created_at: string;
+  updated_at: string;
+  result?: any;
+  error?: string;
+  agent_run_id?: string;
+}
+
 interface AgentState {
   runs: AgentRun[];
   loading: boolean;
   error: string | null;
   currentRun: AgentRun | null;
+  currentTask: TaskStatus | null;
+  pollingActive: boolean;
 }
 
 const initialState: AgentState = {
@@ -70,6 +83,8 @@ const initialState: AgentState = {
   loading: false,
   error: null,
   currentRun: null,
+  currentTask: null,
+  pollingActive: false,
 };
 
 export const fetchAgentRuns = createAsyncThunk(
@@ -85,17 +100,92 @@ export const fetchAgentRuns = createAsyncThunk(
 
 export const runAgent = createAsyncThunk(
   'agent/runAgent',
-  async (formData: FormData) => {
-    const response = await fetch('http://localhost:8001/run-agent/', {
-      method: 'POST',
-      body: formData,
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to run agent');
+  async (formData: FormData, { rejectWithValue }) => {
+    try {
+      const response = await fetch('http://localhost:8001/run-agent/', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        // Try to get detailed error message from the response
+        const errorData = await response.json();
+        return rejectWithValue(errorData.detail || 'Failed to run agent');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error in runAgent:', error);
+      return rejectWithValue('Failed to run agent. Network error or server unavailable.');
     }
-    
-    return await response.json();
+  }
+);
+
+export const pollTaskStatus = createAsyncThunk<any, { taskId: string, attempt?: number }, { state: RootState }>(
+  'agent/pollTaskStatus',
+  async ({ taskId, attempt = 1 }, { dispatch, rejectWithValue, getState }) => {
+    try {
+      // Calculate delay based on attempt number (exponential backoff)
+      // Start with 2 seconds, then 4, 8, 16, etc. but cap at 30 seconds
+      const delay = Math.min(Math.pow(2, attempt) * 1000, 30000);
+      
+      // Get current polling state
+      const { pollingActive } = getState().agent;
+      
+      // If polling is no longer active, don't make the request
+      if (!pollingActive) {
+        return null;
+      }
+      
+      const API_URL = 'http://localhost:8001';
+      const response = await fetch(`${API_URL}/task/${taskId}`);
+      
+      if (!response.ok) {
+        // Try to get detailed error message from the response
+        const errorData = await response.json();
+        return rejectWithValue(errorData.detail || 'Failed to poll task status');
+      }
+      
+      const taskStatus = await response.json();
+      dispatch(setCurrentTask(taskStatus));
+      
+      // If the task is completed or failed, stop polling
+      if (taskStatus.status === 'completed' || taskStatus.status === 'failed') {
+        dispatch(setPollingActive(false));
+        
+        // If completed and has result, fetch the latest runs to update the UI
+        if (taskStatus.status === 'completed' && taskStatus.result) {
+          dispatch(fetchAgentRuns(10));
+        }
+        return taskStatus;
+      }
+      
+      // Adjust polling frequency based on task status
+      // If task is running, poll more frequently than if it's still pending
+      const nextDelay = taskStatus.status === 'running' ? delay / 2 : delay;
+      
+      // Schedule the next poll with increasing delay if task is still pending/running
+      setTimeout(() => {
+        if (getState().agent.pollingActive) {
+          dispatch(pollTaskStatus({ 
+            taskId, 
+            // Increment attempt counter more slowly for running tasks
+            attempt: taskStatus.status === 'running' ? attempt + 0.5 : attempt + 1 
+          }));
+        }
+      }, nextDelay);
+      
+      return taskStatus;
+    } catch (error) {
+      console.error('Error polling task status:', error);
+      // Don't stop polling on network errors, just retry with backoff
+      if (getState().agent.pollingActive) {
+        setTimeout(() => {
+          dispatch(pollTaskStatus({ taskId, attempt: attempt + 1 }));
+        }, Math.min(Math.pow(2, attempt) * 1000, 30000));
+      }
+      return rejectWithValue('Failed to poll task status');
+    }
   }
 );
 
@@ -105,6 +195,12 @@ export const agentSlice = createSlice({
   reducers: {
     setCurrentRun: (state, action: PayloadAction<AgentRun | null>) => {
       state.currentRun = action.payload;
+    },
+    setCurrentTask: (state, action: PayloadAction<TaskStatus | null>) => {
+      state.currentTask = action.payload;
+    },
+    setPollingActive: (state, action: PayloadAction<boolean>) => {
+      state.pollingActive = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -126,16 +222,32 @@ export const agentSlice = createSlice({
         state.error = null;
       })
       .addCase(runAgent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.currentRun = action.payload;
-        state.runs = [action.payload, ...state.runs];
+        state.loading = true; // Keep loading true until task completes
+        state.currentTask = action.payload;
+        state.pollingActive = true;
+      })
+      .addCase(pollTaskStatus.pending, () => {
+        // Don't change loading state during polling
+      })
+      .addCase(pollTaskStatus.fulfilled, (state, action) => {
+        state.currentTask = action.payload;
+        
+        // If task is completed or failed, update loading state
+        if (action.payload.status === 'completed' || action.payload.status === 'failed') {
+          state.loading = false;
+        }
+      })
+      .addCase(pollTaskStatus.rejected, (state, action) => {
+        state.loading = false;        
+        state.error = action.error.message || 'Failed to poll task status';
+        state.pollingActive = false;
       })
       .addCase(runAgent.rejected, (state, action) => {
-        state.loading = false;
+        state.loading = false;        
         state.error = action.error.message || 'Failed to run agent';
       });
   },
 });
 
-export const { setCurrentRun } = agentSlice.actions;
+export const { setCurrentRun, setCurrentTask, setPollingActive } = agentSlice.actions;
 export default agentSlice.reducer;

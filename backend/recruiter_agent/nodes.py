@@ -7,9 +7,8 @@ from recruiter_agent.llm import create_llm
 from recruiter_agent.pydantic_types import JobDescription, Resume, WebResearch, FitAssessment
 from recruiter_agent.utils import (
     extract_links_from_text, get_url_content, extract_username_from_url,
-    calculate_result_relevance, generate_search_queries, generate_llm_search_queries
+    calculate_result_relevance, generate_search_queries, generate_llm_search_queries, format_output
 )
-
 
 def parse_jd_node(state: Dict[str, Any]) -> Dict[str, Any]:
     """
@@ -346,6 +345,8 @@ def fit_score_node(state: Dict[str, Any]) -> Dict[str, Any]:
             Experience:
             {chr(10).join(f"- {exp.get("title")} at {exp.get("company")} ({exp.get("start_date")}-{exp.get("end_date") if exp.get("end_date") else 'Present'})" for exp in resume_structured.get("experience")) if resume_structured.get("experience") else 'Not specified'}
             
+            Total Experience: {resume_structured.get("personal").get("work_experience") if resume_structured.get("personal") else 'Not specified'} years
+            
             Skills:
             {chr(10).join(f"- {skill}" for skill in resume_structured.get("skills")) if resume_structured.get("skills") else 'Not specified'}
             
@@ -384,10 +385,15 @@ def fit_score_node(state: Dict[str, Any]) -> Dict[str, Any]:
             """
         )
     ]
-
+    
     fit_assessment = fit_llm.invoke(messages)
     fit_assessment = fit_assessment.model_dump()
     print("✅ Fit Assessment Completed:")
     print(json.dumps(fit_assessment, indent=2))
-
-    return {**state, "fit_assessment": fit_assessment}
+    
+    # Generate formatted markdown output
+    formatted_output = format_output(fit_assessment)
+    print(f"✅ Generated formatted markdown assessment")
+    
+    # Return both the structured assessment and the formatted markdown
+    return {**state, "fit_assessment": fit_assessment, "formatted_output": formatted_output}

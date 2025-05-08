@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, Play, History } from "lucide-react";
+import { Home, History } from "lucide-react";
 
 const navItems = [
   {
@@ -8,12 +8,7 @@ const navItems = [
     icon: Home,
   },
   {
-    title: "Run Agent",
-    href: "/run-agent",
-    icon: Play,
-  },
-  {
-    title: "History",
+    title: "Candidates",
     href: "/history",
     icon: History,
   },

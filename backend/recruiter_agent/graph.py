@@ -3,6 +3,7 @@ from typing import Annotated, TypedDict, Any
 from langchain_core.messages import AnyMessage
 import urllib
 from recruiter_agent.nodes import parse_jd_node, parse_resume_node, web_research_node, fit_score_node
+from recruiter_agent.utils import format_output
 from recruiter_agent.pydantic_types import JobDescription, Resume, WebResearch, FitAssessment
 from langgraph.graph import StateGraph, START, END, add_messages
 from pypdf import PdfReader
@@ -24,6 +25,7 @@ def create_graph():
         extracted_urls: Any
         web_structured: WebResearch
         fit_assessment: FitAssessment
+        formatted_output: str
 
     workflow = StateGraph(State)
 
@@ -80,7 +82,7 @@ def extract_text_from_pdf(file_path: str) -> str:
                             # Optionally, use rectangle coordinates to find link text (advanced)
                             links.append(uri)
 
-        return text + "\n\nLinks:\n" + "\n".join(links)
+        return text + "\n\nLinks: " + " , ".join(links)
 
     except Exception as e:
         print(f"Error extracting text from PDF: {str(e)}")
@@ -132,44 +134,7 @@ def extract_text_from_file(file_path: str) -> str:
         return ""
 
 
-def format_output(fit_assessment: Dict[str, Any]) -> str:
-    """
-    Format the fit assessment output in a readable format.
 
-    Args:
-        fit_assessment (Dict[str, Any]): The fit assessment data.
-
-    Returns:
-        str: Formatted output.
-    """
-    output = []
-
-    # Overall fit
-    output.append(f"# Candidate Assessment: {fit_assessment['fit_score']}\n")
-
-    # Score details
-    output.append("## Score Details")
-    output.append(
-        f"- Skill match: {fit_assessment['score_details']['skill_match_percentage']:.1f}%")
-    output.append(
-        f"- Experience: {fit_assessment['score_details']['experience_years']} years")
-    output.append(
-        f"- Domain signal: {fit_assessment['score_details']['domain_signal']}\n")
-
-    # Comparison matrix
-    output.append("## Skills Comparison Matrix")
-    output.append("| Skill | Required | Candidate Has |")
-    output.append("| ----- | -------- | ------------ |")
-
-    for entry in fit_assessment['comparison_matrix']:
-        required = "✅" if entry['required'] else "❌"
-        has = "✅" if entry['candidate_has'] else "❌"
-        output.append(f"| {entry['skill']} | {required} | {has} |")
-
-    output.append("\n## Detailed Assessment")
-    output.append(fit_assessment['reasoning'])
-
-    return "\n".join(output)
 
 
 def run_recruiting_assistant(candidate_name: str, resume_text: str, job_description: str) -> dict:

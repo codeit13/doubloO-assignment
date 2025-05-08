@@ -71,11 +71,23 @@ export interface AgentRun {
   output: AgentRunOutput;
 }
 
+export interface TaskStatus {
+  task_id: string;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+  created_at: string;
+  updated_at: string;
+  result?: any;
+  error?: string;
+  agent_run_id?: string;
+}
+
 export interface AgentState {
   runs: AgentRun[];
   loading: boolean;
   error: string | null;
   currentRun: AgentRun | null;
+  currentTask: TaskStatus | null;
+  pollingActive: boolean;
 }
 
 export interface ThemeState {

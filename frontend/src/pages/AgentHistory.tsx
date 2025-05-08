@@ -19,7 +19,7 @@ export default function AgentHistory() {
   const [expandedRuns, setExpandedRuns] = useState<string[]>([]);
 
   useEffect(() => {
-    dispatch(fetchAgentRuns(10));
+    dispatch(fetchAgentRuns(50));
   }, [dispatch]);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function AgentHistory() {
   }, [searchParams]);
 
   const handleRefresh = () => {
-    dispatch(fetchAgentRuns(10));
+    dispatch(fetchAgentRuns(50));
   };
 
   const getInitials = (run: any) => {
@@ -72,7 +72,7 @@ export default function AgentHistory() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Agent History</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Candidates</h1>
         <Button variant="outline" onClick={handleRefresh} disabled={loading}>
           <RefreshCw className="mr-2 h-4 w-4" />
           Refresh
@@ -91,14 +91,14 @@ export default function AgentHistory() {
             onValueChange={setExpandedRuns}
             className="space-y-4"
           >
-            {runs.map((run: AgentRun) => {
+            {runs.map((run: AgentRun, index: number) => {
               const matchScore = getMatchScore(run);
               const scoreColor = getScoreColor(matchScore);
               
               return (
                 <AccordionItem 
-                  key={run.id} 
-                  value={run.id}
+                  key={index} 
+                  value={index.toString()}
                   className="border rounded-lg overflow-hidden shadow-sm"
                 >
                   <AccordionTrigger className="px-6 py-4 hover:bg-accent/50 transition-colors">
@@ -130,35 +130,150 @@ export default function AgentHistory() {
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pb-6">
                     <div className="space-y-6 mt-2">
-                      {/* Match Score Section */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-sm font-medium flex items-center">
-                            <Award className="h-4 w-4 mr-2" />
-                            Match Score
-                          </h4>
-                          <span className={cn("font-semibold", scoreColor)}>{matchScore}%</span>
-                        </div>
-                        <Progress value={matchScore} className="h-2" />
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {matchScore >= 80 ? (
-                            <span className="flex items-center">
-                              <CheckCircle2 className="h-4 w-4 mr-1 text-green-500" />
-                              Strong match for this position
-                            </span>
-                          ) : matchScore >= 60 ? (
-                            <span className="flex items-center">
-                              <Clock className="h-4 w-4 mr-1 text-amber-500" />
-                              Moderate match, may need additional skills
-                            </span>
-                          ) : (
-                            <span className="flex items-center">
-                              <XCircle className="h-4 w-4 mr-1 text-red-500" />
-                              Low match, missing key requirements
-                            </span>
-                          )}
-                        </p>
-                      </div>
+                      {/* Fit Assessment Section - Highlighted */}
+                      {run.output?.fit_assessment && (
+                        <Card className="border-2 border-primary/20 bg-primary/5 shadow-md">
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-base flex items-center">
+                              <Award className="h-5 w-5 mr-2 text-primary" />
+                              Candidate Fit Assessment
+                            </CardTitle>
+                            <CardDescription>
+                              {run.output.fit_assessment.fit_score || 
+                                (matchScore >= 80 ? "Strong Fit" : 
+                                 matchScore >= 60 ? "Moderate Fit" : "Low Fit")}
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-4">
+                              {/* Overall Score */}
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <h4 className="text-sm font-medium">Overall Match</h4>
+                                  <span className={cn("font-semibold", scoreColor)}>{matchScore}%</span>
+                                </div>
+                                <Progress 
+                                  value={matchScore} 
+                                  className="h-2" 
+                                  indicatorClassName={cn(
+                                    matchScore >= 80 ? "bg-green-500" :
+                                    matchScore >= 60 ? "bg-amber-500" : "bg-red-500"
+                                  )}
+                                />
+                                
+                                {/* Score Details */}
+                                {run.output.fit_assessment.score_details && (
+                                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
+                                    {run.output.fit_assessment.score_details.experience_years && (
+                                      <div className="bg-background rounded-md p-2 text-center">
+                                        <div className="text-xs text-muted-foreground">Experience</div>
+                                        <div className="font-medium">{run.output.fit_assessment.score_details.experience_years} years</div>
+                                      </div>
+                                    )}
+                                    {run.output.fit_assessment.score_details.domain_signal && (
+                                      <div className="bg-background rounded-md p-2 text-center">
+                                        <div className="text-xs text-muted-foreground">Domain Signal</div>
+                                        <div className="font-medium">{run.output.fit_assessment.score_details.domain_signal}</div>
+                                      </div>
+                                    )}
+                                    <div className="bg-background rounded-md p-2 text-center">
+                                      <div className="text-xs text-muted-foreground">Skill Match</div>
+                                      <div className="font-medium">{matchScore}%</div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Comparison Matrix */}
+                              {run.output.fit_assessment.comparison_matrix && (
+                                <div className="mt-4">
+                                  <h5 className="text-sm font-medium mb-2">Skills Assessment</h5>
+                                  <div className="bg-background rounded-md p-3 overflow-auto max-h-64">
+                                    <table className="w-full text-sm">
+                                      <thead>
+                                        <tr className="border-b">
+                                          <th className="text-left pb-2 font-medium">Required Skill</th>
+                                          <th className="text-center pb-2 font-medium w-24">Match</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {run.output.fit_assessment.comparison_matrix.map((item: any, i: number) => (
+                                          <tr key={i} className="border-b border-muted last:border-0">
+                                            <td className="py-2">{item.skill}</td>
+                                            <td className="py-2 text-center">
+                                              {item.candidate_has ? (
+                                                <CheckCircle2 className="h-5 w-5 text-green-500 inline-block" />
+                                              ) : (
+                                                <XCircle className="h-5 w-5 text-red-500 inline-block" />
+                                              )}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Reasoning */}
+                              {run.output.fit_assessment.reasoning && (
+                                <div className="mt-4">
+                                  <h5 className="text-sm font-medium mb-2">Assessment Reasoning</h5>
+                                  <div className="bg-background rounded-md p-3 text-sm">
+                                    <p className="text-muted-foreground">{run.output.fit_assessment.reasoning}</p>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Strengths & Gaps */}
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                {run.output.fit_assessment.strengths && (
+                                  <div>
+                                    <h5 className="text-sm font-medium mb-2">Strengths</h5>
+                                    <ul className="space-y-1 bg-background rounded-md p-3">
+                                      {run.output.fit_assessment.strengths.map((strength: string, i: number) => (
+                                        <li key={i} className="text-sm flex items-start">
+                                          <div className="mr-2 mt-0.5 text-green-500 flex-shrink-0">
+                                            <CheckCircle2 className="h-3.5 w-3.5" />
+                                          </div>
+                                          <span className="text-muted-foreground">{strength}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+                                
+                                {run.output.fit_assessment.gaps && (
+                                  <div>
+                                    <h5 className="text-sm font-medium mb-2">Areas for Improvement</h5>
+                                    <ul className="space-y-1 bg-background rounded-md p-3">
+                                      {run.output.fit_assessment.gaps.map((gap: string, i: number) => (
+                                        <li key={i} className="text-sm flex items-start">
+                                          <div className="mr-2 mt-0.5 text-red-500 flex-shrink-0">
+                                            <XCircle className="h-3.5 w-3.5" />
+                                          </div>
+                                          <span className="text-muted-foreground">{gap}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Recommendation */}
+                              {run.output.fit_assessment.recommendation && (
+                                <div className="mt-4 pt-4 border-t">
+                                  <h5 className="text-sm font-medium mb-2 flex items-center">
+                                    <Award className="h-4 w-4 mr-2" />
+                                    Recommendation
+                                  </h5>
+                                  <p className="text-sm font-medium">{run.output.fit_assessment.recommendation}</p>
+                                </div>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )}
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Job Description Section */}

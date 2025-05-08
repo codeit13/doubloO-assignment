@@ -559,3 +559,43 @@ def generate_llm_search_queries(state: Dict[str, Any], num_queries: int = 3) -> 
     except Exception as e:
         print(f"Error generating search queries with LLM: {str(e)}")
         return []
+
+
+def format_output(fit_assessment: Dict[str, Any]) -> str:
+    """
+    Format the fit assessment output in a readable format.
+
+    Args:
+        fit_assessment (Dict[str, Any]): The fit assessment data.
+
+    Returns:
+        str: Formatted output.
+    """
+    output = []
+
+    # Overall fit
+    output.append(f"# Candidate Assessment: {fit_assessment['fit_score']}\n")
+
+    # Score details
+    output.append("## Score Details")
+    output.append(
+        f"- Skill match: {fit_assessment['score_details']['skill_match_percentage']:.1f}%")
+    output.append(
+        f"- Experience: {fit_assessment['score_details']['experience_years']} years")
+    output.append(
+        f"- Domain signal: {fit_assessment['score_details']['domain_signal']}\n")
+
+    # Comparison matrix
+    output.append("## Skills Comparison Matrix")
+    output.append("| Skill | Required | Candidate Has |")
+    output.append("| ----- | -------- | ------------ |")
+
+    for entry in fit_assessment['comparison_matrix']:
+        required = "✅" if entry['required'] else "❌"
+        has = "✅" if entry['candidate_has'] else "❌"
+        output.append(f"| {entry['skill']} | {required} | {has} |")
+
+    output.append("\n## Detailed Assessment")
+    output.append(fit_assessment['reasoning'])
+
+    return "\n".join(output)

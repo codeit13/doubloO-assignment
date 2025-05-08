@@ -13,6 +13,7 @@ class AgentRunOutput(BaseModel):
     resume_structured: Optional[Dict[str, Any]] = None
     web_structured: Optional[Dict[str, Any]] = None
     fit_assessment: Optional[Dict[str, Any]] = None
+    formatted_output: Optional[str] = None  # Markdown formatted assessment
 
 class AgentRun(Document):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
