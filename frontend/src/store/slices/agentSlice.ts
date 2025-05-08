@@ -3,6 +3,9 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 
 // API URL configuration based on environment
+console.log(import.meta.env);
+console.log(import.meta.env.VITE_NODE_ENV);
+
 const API_BASE_URL = import.meta.env.VITE_NODE_ENV === 'production' 
   ? 'https://recruiter-backend.sleebit.com' 
   : 'http://localhost:8005';
