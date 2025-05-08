@@ -69,7 +69,7 @@ const RandomProgressBar = ({ status }: RandomProgressBarProps) => {
   };
   
   return (
-    <div className="w-full bg-teal-100 dark:bg-teal-900/50 rounded-full h-1.5 overflow-hidden">
+    <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
       <div 
         className={`h-full ${getColorClass()} transition-all duration-500 ease-out`}
         style={{ width: `${progress}%` }}
@@ -154,7 +154,7 @@ export default function RunAgent() {
       case "retrying":
         return "text-amber-500";
       default:
-        return "text-teal-500";
+        return "text-primary";
     }
   };
   
@@ -355,48 +355,51 @@ export default function RunAgent() {
     if (fileType.includes('pdf')) return <FileIcon className="h-8 w-8 text-red-500" />;
     if (fileType.includes('doc')) return <FileIcon className="h-8 w-8 text-blue-500" />;
     if (fileType.includes('txt')) return <FileText className="h-8 w-8 text-gray-500" />;
-    return <FileIcon className="h-8 w-8 text-primary" />;
+    return <FileIcon className="h-8 w-8 text-teal-500" />;
   };
 
   return (
     <div className="space-y-6 w-full max-w-5xl mx-auto">
-      <div className="flex items-center justify-between bg-gradient-to-b from-teal-900/20 to-teal-800/40 p-6 rounded-xl mb-8 shadow-lg relative overflow-hidden">
+      <div className="flex items-center justify-between bg-gradient-to-b from-teal-900/20 to-teal-600/0 dark:from-teal-900/40 dark:to-teal-600/0 p-6 rounded-xl relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.8))] opacity-20"></div>
         <div className="relative z-10 flex items-center gap-4">
-          <div className="bg-teal-700 p-3 rounded-full animate-pulse">
-            <Brain className="h-8 w-8 text-white" />
+        <div className="relative z-10">
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-teal-600/30 flex items-center justify-center">
+            <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-teal-500/40 flex items-center justify-center">
+              <div className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-teal-400/50 flex items-center justify-center">
+                {/* <div className="w-6 h-6 rounded-full bg-teal-300/60 animate-ping"></div> */}
+                <div className="bg-teal-600 p-3 rounded-full bg-teal-300/60 animate-ping">
+                  <Brain className="h-6 w-6 text-white" />
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">AI Recruiter Agent</h1>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+              AI Recruiter Agent
+            </h1>
             <div className="hidden md:flex flex-wrap items-center gap-2 mt-1">
-              <Badge variant="outline" className="bg-teal-700/20 text-teal-100 border-teal-600">
+              <Badge variant="outline" className="bg-teal-900 text-teal-300 border-teal-900/30">
                 <Cpu className="h-3 w-3 mr-1" /> Intelligent Analysis
               </Badge>
-              <Badge variant="outline" className="bg-teal-700/20 text-teal-100 border-teal-600">
+              <Badge variant="outline" className="bg-teal-900 text-teal-300 border-teal-900/30">
                 <Bot className="h-3 w-3 mr-1" /> Resume Parsing
               </Badge>
-              <Badge variant="outline" className="bg-teal-700/20 text-teal-100 border-teal-600">
+              <Badge variant="outline" className="bg-teal-900 text-teal-300 border-teal-900/30">
                 <Sparkles className="h-3 w-3 mr-1" /> Candidate Matching
               </Badge>
             </div>
           </div>
         </div>
-        <div className="relative z-10 hidden md:block">
-          <div className="w-24 h-24 rounded-full bg-teal-600/30 flex items-center justify-center">
-            <div className="w-16 h-16 rounded-full bg-teal-500/40 flex items-center justify-center">
-              <div className="w-10 h-10 rounded-full bg-teal-400/50 flex items-center justify-center">
-                <div className="w-6 h-6 rounded-full bg-teal-300/60 animate-ping"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+       
       </div>
       
       <form onSubmit={handleSubmit}>
 
           {/* Candidate Name Card */}
            <div className="space-y-2 mt-10">
-                <Label htmlFor="candidate_name" className="text-teal-200">
+                <Label htmlFor="candidate_name" className="text-slate-700 dark:text-slate-200">
                   Candidate Name
                 </Label>
                 <Input
@@ -404,56 +407,56 @@ export default function RunAgent() {
                   placeholder="Enter candidate name"
                   value={candidateName}
                   onChange={(e) => setCandidateName(e.target.value)}
-                  className="bg-teal-900/20 border-teal-700/50 focus:border-teal-500 focus:ring-teal-500/20 placeholder:text-teal-400/70"
+                  className="bg-zinc-100 dark:bg-zinc-900/50 border-zinc-300 dark:border-zinc-700 focus:border-teal-500 focus:ring-teal-500/20 placeholder:text-zinc-400"
                 />
               </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Resume Card */}
-          <Card className="overflow-hidden border border-teal-700/10 bg-gradient-to-b from-teal-900/10 to-transparent backdrop-blur-sm hover:shadow-[0_0_15px_rgba(0,173,173,0.3)] transition-all duration-300">
-            <CardHeader className="border-b border-teal-700/30">
-              <CardTitle className="flex items-center gap-2 text-teal-100">
-                <div className="bg-teal-700/30 p-1.5 rounded-md">
-                  <FileIcon className="h-4 w-4 text-teal-300" />
+          <Card className="overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-gradient-to-b from-teal-50 to-white dark:from-teal-900/10 dark:to-zinc-900/30 backdrop-blur-sm hover:shadow-md dark:hover:shadow-teal-600/20 transition-all duration-300 gap-4 pb-2 h-fit">
+            <CardHeader className="border-b border-primary/30">
+              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-slate-100">
+                <div className="bg-teal-500/20 p-1.5 rounded-md">
+                  <FileIcon className="h-4 w-4 text-teal-500" />
                 </div>
                 Resume
               </CardTitle>
-              <CardDescription className="text-teal-300/70">
+              <CardDescription className="text-primary/70">
                 Upload or enter candidate's resume
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="resume-switch" className="text-teal-200 flex items-center gap-2">
+                  <Label htmlFor="resume-switch" className="text-slate-700 dark:text-slate-300 flex items-center gap-2">
                     <span>Upload File</span>
-                    <Badge variant="outline" className="bg-teal-800/30 text-teal-300 border-teal-700/30 capitalize tracking-wider">
+                    <Badge variant="outline" className="bg-teal-500/10 text-teal-500 border-teal-500/30 capitalize tracking-wider">
                       {resumeInputMethod}
                     </Badge>
                   </Label>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-teal-400">Text</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">Text</span>
                     <Switch 
                       id="resume-switch" 
                       checked={resumeInputMethod === "file"}
                       onCheckedChange={(checked) => setResumeInputMethod(checked ? "file" : "text")}
                       className="data-[state=checked]:bg-teal-500"
                     />
-                    <span className="text-xs text-teal-400">File</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">File</span>
                   </div>
                 </div>
                 
                 {resumeInputMethod === "file" ? (
                   !resume.file ? (
                     <div
-                      className="border-2 border-dashed border-teal-700/30 rounded-lg p-6 flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-teal-900/10 transition-all"
+                      className="border-2 border-dashed border-primary/30 rounded-lg p-6 flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-primary/10 transition-all"
                       onDragOver={handleDragOver}
                       onDrop={(e) => handleDrop(e, "resume")}
                       onClick={() => document.getElementById("resume-upload")?.click()}
                     >
-                      <Upload className="h-10 w-10 text-teal-500/50" />
+                      <Upload className="h-10 w-10 text-primary/50" />
                       <div className="text-center">
-                        <p className="text-sm font-medium text-teal-300">Drag & drop resume file or click to browse</p>
-                        <p className="text-xs text-teal-400/70 mt-1">Supports PDF, DOCX, TXT files</p>
+                        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Drag & drop resume file or click to browse</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Supports PDF, DOCX, TXT files</p>
                       </div>
                       <input
                         id="resume-upload"
@@ -464,21 +467,21 @@ export default function RunAgent() {
                       />
                     </div>
                   ) : (
-                    <div className="bg-teal-800/10 rounded-lg p-4 relative border border-teal-700/20">
+                    <div className="bg-zinc-100 dark:bg-zinc-900 rounded-lg p-4 relative border border-primary/20">
                       <button
                         type="button"
                         onClick={() => removeFile("resume")}
-                        className="absolute top-2 right-2 h-6 w-6 rounded-full bg-teal-900/80 flex items-center justify-center hover:bg-teal-700 hover:text-white transition-all"
+                        className="absolute top-2 right-2 h-6 w-6 rounded-full bg-primary/10 dark:bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all"
                       >
                         <X className="h-4 w-4" />
                       </button>
                       <div className="flex items-center gap-3">
-                        <div className="bg-teal-700/20 p-2 rounded">
+                        <div className="bg-primary/20 p-2 rounded">
                           {getFileIcon(resume.type)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate text-teal-200">{resume.name}</p>
-                          <p className="text-xs text-teal-400/70">{formatFileSize(resume.size)}</p>
+                          <p className="font-medium truncate text-slate-700 dark:text-slate-200">{resume.name}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{formatFileSize(resume.size)}</p>
                         </div>
                       </div>
                     </div>
@@ -488,7 +491,7 @@ export default function RunAgent() {
                     placeholder="Paste or type resume text here..."
                     value={resumeText}
                     onChange={(e) => setResumeText(e.target.value)}
-                    className="min-h-[150px] max-h-[150px] resize-none bg-teal-900/20 border-teal-700/30 focus:border-teal-500 focus:ring-teal-500/20 placeholder:text-teal-400/70"
+                    className="min-h-[150px] max-h-[150px] resize-none bg-primary/20 border-primary/30 focus:border-primary focus:ring-primary/20 placeholder:text-primary/70"
                   />
                 )}
               </div>
@@ -496,51 +499,51 @@ export default function RunAgent() {
           </Card>
          
           {/* Job Description Card - Spans full width */}
-          <Card className="overflow-hidden border-teal-700/10 bg-gradient-to-b from-teal-900/10 to-transparent backdrop-blur-sm hover:shadow-[0_0_15px_rgba(0,173,173,0.3)] transition-all duration-300">
-            <CardHeader className="border-b border-teal-700/30">
-              <CardTitle className="flex items-center gap-2 text-teal-100">
-                <div className="bg-teal-700/30 p-1.5 rounded-md">
-                  <FileText className="h-4 w-4 text-teal-300" />
+          <Card className="overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-gradient-to-b from-teal-50 to-white dark:from-teal-900/10 dark:to-zinc-900/30 backdrop-blur-sm hover:shadow-md dark:hover:shadow-teal-600/20 transition-all duration-300 gap-4 pb-2 h-fit">
+            <CardHeader className="border-b border-primary/30">
+              <CardTitle className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
+                <div className="bg-teal-500/20 p-1.5 rounded-md">
+                  <FileText className="h-4 w-4 text-teal-500" />
                 </div>
                 Job Description
               </CardTitle>
-              <CardDescription className="text-teal-300/70">
+              <CardDescription className="text-primary/70">
                 Provide the job description as a file or text
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="job-description-switch" className="text-teal-200 flex items-center gap-2">
+                  <Label htmlFor="job-description-switch" className="text-slate-700 dark:text-slate-300 flex items-center gap-2">
                     <span>Upload File</span>
-                    <Badge variant="outline" className="bg-teal-800/30 text-teal-300 border-teal-700/30 capitalize tracking-wider">
+                    <Badge variant="outline" className="bg-teal-500/10 text-teal-500 border-teal-500/30 capitalize tracking-wider">
                       {jobDescriptionInputMethod}
                     </Badge>
                   </Label>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-teal-400">Text</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">Text</span>
                     <Switch 
                       id="job-description-switch" 
                       checked={jobDescriptionInputMethod === "file"}
                       onCheckedChange={(checked) => setJobDescriptionInputMethod(checked ? "file" : "text")}
-                      className="data-[state=checked]:bg-teal-600"
+                      className="data-[state=checked]:bg-teal-500"
                     />
-                    <span className="text-xs text-teal-400">File</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">File</span>
                   </div>
                 </div>
                 
                 {jobDescriptionInputMethod === "file" ? (
                   !jobDescription.file ? (
                     <div
-                      className="border-2 border-dashed border-teal-700/30 rounded-lg p-6 flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-teal-900/10 transition-all"
+                      className="border-2 border-dashed border-primary/30 rounded-lg p-6 flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-primary/10 transition-all"
                       onDragOver={handleDragOver}
                       onDrop={(e) => handleDrop(e, "jobDescription")}
                       onClick={() => document.getElementById("job-description-upload")?.click()}
                     >
-                      <Upload className="h-10 w-10 text-teal-500/50" />
+                      <Upload className="h-10 w-10 text-primary/50" />
                       <div className="text-center">
-                        <p className="text-sm font-medium text-teal-300">Drag & drop job description file or click to browse</p>
-                        <p className="text-xs text-teal-400/70 mt-1">Supports PDF, DOCX, TXT files</p>
+                        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Drag & drop job description file or click to browse</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Supports PDF, DOCX, TXT files</p>
                       </div>
                       <input
                         id="job-description-upload"
@@ -551,21 +554,21 @@ export default function RunAgent() {
                       />
                     </div>
                   ) : (
-                    <div className="bg-teal-800/10 rounded-lg p-4 relative border border-teal-700/20">
+                    <div className="bg-zinc-100 dark:bg-zinc-900 rounded-lg p-4 relative border border-primary/20">
                       <button
                         type="button"
                         onClick={() => removeFile("jobDescription")}
-                        className="absolute top-2 right-2 h-6 w-6 rounded-full bg-teal-900/80 flex items-center justify-center hover:bg-teal-700 hover:text-white transition-all"
+                        className="absolute top-2 right-2 h-6 w-6 rounded-full bg-primary/10 dark:bg-primary/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all"
                       >
                         <X className="h-4 w-4" />
                       </button>
                       <div className="flex items-center gap-3">
-                        <div className="bg-teal-700/20 p-2 rounded">
+                        <div className="bg-primary/20 p-2 rounded">
                           {getFileIcon(jobDescription.type)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate text-teal-200">{jobDescription.name}</p>
-                          <p className="text-xs text-teal-400/70">{formatFileSize(jobDescription.size)}</p>
+                          <p className="font-medium truncate text-slate-700 dark:text-slate-200">{jobDescription.name}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{formatFileSize(jobDescription.size)}</p>
                         </div>
                       </div>
                     </div>
@@ -575,7 +578,7 @@ export default function RunAgent() {
                     placeholder="Paste or type job description here..."
                     value={jobDescriptionText}
                     onChange={(e) => setJobDescriptionText(e.target.value)}
-                    className="min-h-[150px] max-h-[150px] resize-none bg-teal-900/20 border-teal-700/30 focus:border-teal-500 focus:ring-teal-500/20 placeholder:text-teal-400/70"
+                    className="min-h-[150px] max-h-[150px] resize-none bg-primary/20 border-primary/30 focus:border-primary focus:ring-primary/20 placeholder:text-primary/70"
                   />
                 )}
               </div>
@@ -584,19 +587,19 @@ export default function RunAgent() {
         </div>
 
         {/* Submit Button Card */}
-        <Card className="mt-6 overflow-hidden border border-teal-700 bg-gradient-to-b from-teal-900/20 to-teal-800/40 shadow-lg transition-all duration-300 relative">
+        <Card className="mt-6 overflow-hidden border-0 bg-gradient-to-t from-teal-900/20 to-teal-600/0 dark:from-teal-900/30 dark:to-teal-600/0 shadow-lg transition-all duration-300 relative">
           <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.8))] opacity-20"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
               <div className="space-y-3">
-                <h3 className="text-xl font-medium text-white flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-teal-300" />
+                <h3 className="text-xl font-medium text-slate-900 dark:text-white flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-teal-500" />
                   Candidate AI Analysis
                 </h3>
-                <p className="text-sm text-teal-100">
+                <p className="text-sm text-slate-700 dark:text-slate-200">
                   Our AI agent will analyze the resume against the job description to evaluate candidate fit.
                 </p>
-                <div className="hidden md:flex items-center gap-4 text-xs text-teal-300">
+                <div className="hidden md:flex items-center gap-4 text-xs text-slate-600 dark:text-slate-300">
                   <div className="flex items-center gap-1.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-teal-400 animate-pulse"></div>
                     <span>Intelligent matching</span>
@@ -612,14 +615,14 @@ export default function RunAgent() {
                 </div>
               </div>
               
-              <div className="relative">
+              <div className="relative w-full md:w-fit">
                 {aiThinking && (
                   <div className="absolute -top-3 -left-3 right-0 bottom-0 bg-teal-500/20 rounded-full blur-xl animate-pulse"></div>
                 )}
                 <Button 
                   type="submit" 
                   className={cn(
-                    `w-full md:w-auto transition-all bg-gradient-to-r from-teal-500 to-teal-600 border border-teal-400/30 text-white hover:shadow-[0_0_15px_rgba(0,173,173,0.5)]`,
+                    `w-full md:w-auto transition-all bg-gradient-to-r from-teal-500 to-teal-600 border border-teal-400/30 text-white hover:shadow-[0_0_15px_rgba(0,173,173,0.5)] cursor-pointer`,
                     loading ? "opacity-90" : "hover:scale-105"
                   )} 
                   disabled={loading}
@@ -635,8 +638,8 @@ export default function RunAgent() {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <Cpu className="h-5 w-5 text-teal-200" />
-                      <span>Run AI Analysis</span>
+                      <Cpu className="h-5 w-5 text-teal-100" />
+                      <span>Run Agent</span>
                       <ArrowRight className="h-4 w-4 ml-1" />
                     </div>
                   )}
@@ -646,7 +649,7 @@ export default function RunAgent() {
             
             {/* Task Status Display */}
             {currentTask && (
-              <div className="mt-4 p-4 border border-teal-200 rounded-lg bg-teal-50 dark:bg-teal-900/20 dark:border-teal-800">
+              <div className="mt-4 p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/50">
                 <div className="flex items-center">
                   {/* Use type assertion to handle the 'retrying' status */}
                   {(currentTask.status as string) === 'completed' ? (
@@ -658,12 +661,12 @@ export default function RunAgent() {
                   ) : (
                     <Loader2 className="mr-2 h-5 w-5 text-teal-500 animate-spin" />
                   )}
-                  <div className={`font-medium text-teal-800 dark:text-teal-200 ${getStatusColorClass()}`}>
+                  <div className={`font-medium text-slate-800 dark:text-slate-200 ${getStatusColorClass()}`}>
                     Task Status: {(currentTask.status as string).charAt(0).toUpperCase() + (currentTask.status as string).slice(1)}
                   </div>
                 </div>
-                <p className="mt-2 text-sm text-teal-600 dark:text-teal-300">{getStatusMessage()}</p>
-                <p className="mt-1 text-xs text-teal-500 dark:text-teal-400">Task ID: {currentTask.task_id}</p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{getStatusMessage()}</p>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Task ID: {currentTask.task_id}</p>
                 
                 {/* Show additional info for retrying state */}
                 {(currentTask.status as string) === 'retrying' && (
@@ -689,18 +692,18 @@ export default function RunAgent() {
                 
                 {/* Show results when task is completed */}
                 {currentTask.status === 'completed' && currentTask.result && (
-                  <div className="mt-4 border-t border-teal-200 pt-4">
+                  <div className="mt-4 border-t border-slate-200 dark:border-slate-700 pt-4">
                     <h3 className="text-lg font-medium text-teal-800 dark:text-teal-200 mb-3">Results</h3>
 
                     {/* Fit Assessment - Highlighted */}
                     {currentTask.result.fit_assessment && (
-                      <div className="mb-4 border-2 border-teal-200 dark:border-teal-800 bg-teal-50/50 dark:bg-teal-900/20 rounded-lg shadow-md overflow-hidden">
-                        <div className="bg-teal-100 dark:bg-teal-800/30 px-4 py-3">
-                          <h4 className="text-md font-medium text-teal-800 dark:text-teal-200 flex items-center">
+                      <div className="mb-4 border-2 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/20 rounded-lg shadow-md overflow-hidden">
+                        <div className="bg-slate-100 dark:bg-slate-800/30 px-4 py-3">
+                          <h4 className="text-md font-medium text-slate-800 dark:text-slate-200 flex items-center">
                             <Award className="h-5 w-5 mr-2 text-teal-600 dark:text-teal-400" /> 
                             Candidate Fit Assessment
                           </h4>
-                          <p className="text-sm text-teal-600 dark:text-teal-300">
+                          <p className="text-sm text-slate-600 dark:text-slate-300">
                             {currentTask.result.fit_assessment.fit_score || 
                               (currentTask.result.fit_assessment.score_details?.skill_match_percentage >= 80 ? "Strong Fit" : 
                                currentTask.result.fit_assessment.score_details?.skill_match_percentage >= 60 ? "Moderate Fit" : "Low Fit")}
@@ -712,12 +715,12 @@ export default function RunAgent() {
                           {currentTask.result.fit_assessment.score_details && (
                             <div className="mb-4">
                               <div className="flex items-center justify-between mb-1">
-                                <p className="text-teal-700 dark:text-teal-300 text-sm font-medium">Overall Match</p>
-                                <span className="text-sm font-medium text-teal-700 dark:text-teal-300">
+                                <p className="text-slate-700 dark:text-slate-300 text-sm font-medium">Overall Match</p>
+                                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                   {currentTask.result.fit_assessment.score_details.skill_match_percentage}%
                                 </span>
                               </div>
-                              <div className="w-full bg-teal-100 dark:bg-teal-900/50 rounded-full h-2.5">
+                              <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2.5">
                                 <div 
                                   className={`h-2.5 rounded-full ${getScoreColorClass(currentTask.result.fit_assessment.score_details.skill_match_percentage)}`} 
                                   style={{ width: `${currentTask.result.fit_assessment.score_details.skill_match_percentage}%` }}
@@ -728,22 +731,22 @@ export default function RunAgent() {
                               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
                                 {currentTask.result.fit_assessment.score_details.experience_years && (
                                   <div className="bg-white dark:bg-teal-900/40 rounded-md p-2 text-center">
-                                    <div className="text-xs text-teal-600 dark:text-teal-400">Experience</div>
-                                    <div className="font-medium text-teal-800 dark:text-teal-200">
+                                    <div className="text-xs text-slate-600 dark:text-slate-400">Experience</div>
+                                    <div className="font-medium text-slate-800 dark:text-slate-200">
                                       {currentTask.result.fit_assessment.score_details.experience_years} years
                                     </div>
                                   </div>
                                 )}
                                 {currentTask.result.fit_assessment.score_details.domain_signal && (
                                   <div className="bg-white dark:bg-teal-900/40 rounded-md p-2 text-center">
-                                    <div className="text-xs text-teal-600 dark:text-teal-400">Domain Signal</div>
-                                    <div className="font-medium text-teal-800 dark:text-teal-200">
+                                    <div className="text-xs text-slate-600 dark:text-slate-400">Domain Signal</div>
+                                    <div className="font-medium text-slate-800 dark:text-slate-200">
                                       {currentTask.result.fit_assessment.score_details.domain_signal}
                                     </div>
                                   </div>
                                 )}
                                 <div className="bg-white dark:bg-teal-900/40 rounded-md p-2 text-center">
-                                  <div className="text-xs text-teal-600 dark:text-teal-400">Skill Match</div>
+                                  <div className="text-xs text-slate-600 dark:text-slate-400">Skill Match</div>
                                   <div className="font-medium text-teal-800 dark:text-teal-200">
                                     {currentTask.result.fit_assessment.score_details.skill_match_percentage}%
                                   </div>
@@ -755,19 +758,19 @@ export default function RunAgent() {
                           {/* Comparison Matrix */}
                           {currentTask.result.fit_assessment.comparison_matrix && (
                             <div className="mb-4">
-                              <h5 className="text-sm font-medium text-teal-700 dark:text-teal-300 mb-2">Skills Assessment</h5>
-                              <div className="bg-white dark:bg-teal-900/40 rounded-md p-3 overflow-auto max-h-64">
+                              <h5 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Skills Assessment</h5>
+                              <div className="bg-white dark:bg-slate-900/40 rounded-md p-3 overflow-auto max-h-64">
                                 <table className="w-full text-sm">
                                   <thead>
                                     <tr className="border-b border-teal-100 dark:border-teal-800/30">
-                                      <th className="text-left pb-2 font-medium text-teal-700 dark:text-teal-300">Required Skill</th>
-                                      <th className="text-center pb-2 font-medium text-teal-700 dark:text-teal-300 w-24">Match</th>
+                                      <th className="text-left pb-2 font-medium text-slate-700 dark:text-slate-300">Required Skill</th>
+                                      <th className="text-center pb-2 font-medium text-slate-700 dark:text-slate-300 w-24">Match</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     {currentTask.result.fit_assessment.comparison_matrix.map((item: any, i: number) => (
-                                      <tr key={i} className="border-b border-teal-100 dark:border-teal-800/30 last:border-0">
-                                        <td className="py-2 text-teal-600 dark:text-teal-400">{item.skill}</td>
+                                      <tr className="border-b border-slate-200 dark:border-slate-700/30 last:border-0">
+                                        <td className="py-2 text-slate-600 dark:text-slate-400">{item.skill}</td>
                                         <td className="py-2 text-center">
                                           {item.candidate_has ? (
                                             <CheckCircle2 className="h-5 w-5 text-green-500 inline-block" />
@@ -788,14 +791,14 @@ export default function RunAgent() {
                             {/* Strengths */}
                             {currentTask.result.fit_assessment.strengths && (
                               <div>
-                                <h5 className="text-sm font-medium text-teal-700 dark:text-teal-300 mb-2">Strengths</h5>
-                                <ul className="space-y-1 bg-white dark:bg-teal-900/40 rounded-md p-3">
+                                <h5 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Strengths</h5>
+                                <ul className="space-y-1 bg-white dark:bg-slate-900/40 rounded-md p-3">
                                   {currentTask.result.fit_assessment.strengths.map((strength: string, index: number) => (
                                     <li key={index} className="text-xs flex items-start">
                                       <div className="mr-2 mt-0.5 text-green-500 flex-shrink-0">
                                         <CheckCircle2 className="h-3.5 w-3.5" />
                                       </div>
-                                      <span className="text-teal-600 dark:text-teal-400">{strength}</span>
+                                      <span className="text-slate-600 dark:text-slate-400">{strength}</span>
                                     </li>
                                   ))}
                                 </ul>
@@ -805,14 +808,14 @@ export default function RunAgent() {
                             {/* Gaps */}
                             {currentTask.result.fit_assessment.gaps && (
                               <div>
-                                <h5 className="text-sm font-medium text-teal-700 dark:text-teal-300 mb-2">Improvement Areas</h5>
-                                <ul className="space-y-1 bg-white dark:bg-teal-900/40 rounded-md p-3">
+                                <h5 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Improvement Areas</h5>
+                                <ul className="space-y-1 bg-white dark:bg-slate-900/40 rounded-md p-3">
                                   {currentTask.result.fit_assessment.gaps.map((gap: string, index: number) => (
                                     <li key={index} className="text-xs flex items-start">
                                       <div className="mr-2 mt-0.5 text-red-500 flex-shrink-0">
                                         <XCircle className="h-3.5 w-3.5" />
                                       </div>
-                                      <span className="text-teal-600 dark:text-teal-400">{gap}</span>
+                                      <span className="text-slate-600 dark:text-slate-400">{gap}</span>
                                     </li>
                                   ))}
                                 </ul>
@@ -823,21 +826,21 @@ export default function RunAgent() {
                           {/* Reasoning */}
                           {currentTask.result.fit_assessment.reasoning && (
                             <div className="mb-4">
-                              <h5 className="text-sm font-medium text-teal-700 dark:text-teal-300 mb-2">Assessment Reasoning</h5>
+                              <h5 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Assessment Reasoning</h5>
                               <div className="bg-white dark:bg-teal-900/40 rounded-md p-3 text-sm">
-                                <p className="text-teal-600 dark:text-teal-400 text-xs">{currentTask.result.fit_assessment.reasoning}</p>
+                                <p className="text-slate-600 dark:text-slate-400 text-xs">{currentTask.result.fit_assessment.reasoning}</p>
                               </div>
                             </div>
                           )}
                           
                           {/* Recommendation */}
                           {currentTask.result.fit_assessment.recommendation && (
-                            <div className="mt-4 pt-4 border-t border-teal-100 dark:border-teal-800/30">
-                              <h5 className="text-sm font-medium text-teal-700 dark:text-teal-300 mb-2 flex items-center">
+                            <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/30">
+                              <h5 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center">
                                 <Award className="h-4 w-4 mr-2" />
                                 Recommendation
                               </h5>
-                              <p className="text-sm font-medium text-teal-800 dark:text-teal-200">
+                              <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
                                 {currentTask.result.fit_assessment.recommendation}
                               </p>
                             </div>
@@ -850,24 +853,24 @@ export default function RunAgent() {
                     {/* Resume Analysis */}
                     {currentTask.result.resume_structured && (
                       <div className="mb-4">
-                        <h4 className="text-md font-medium text-teal-700 dark:text-teal-300 mb-2 flex items-center">
+                        <h4 className="text-md font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center">
                           <User className="h-4 w-4 mr-2" /> Resume Analysis
                         </h4>
-                        <div className="bg-white dark:bg-teal-900/30 rounded-md p-3 text-sm">
+                        <div className="bg-white dark:bg-slate-900/30 rounded-md p-3 text-sm">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {/* Personal Info */}
                             {currentTask.result.resume_structured.personal && (
                               <div>
-                                <p className="font-medium text-teal-700 dark:text-teal-300">
+                                <p className="font-medium text-slate-700 dark:text-slate-300">
                                   {currentTask.result.resume_structured.personal.name}
                                 </p>
-                                <p className="text-teal-600 dark:text-teal-400 text-xs">
+                                <p className="text-slate-600 dark:text-slate-400 text-xs">
                                   {currentTask.result.resume_structured.personal.email}
                                 </p>
-                                <p className="text-teal-600 dark:text-teal-400 text-xs">
+                                <p className="text-slate-600 dark:text-slate-400 text-xs">
                                   {currentTask.result.resume_structured.personal.phone}
                                 </p>
-                                <p className="text-teal-600 dark:text-teal-400 text-xs mt-1">
+                                <p className="text-slate-600 dark:text-slate-400 text-xs mt-1">
                                   Work Experience: {currentTask.result.resume_structured.personal.work_experience} years
                                 </p>
                               </div>
@@ -876,13 +879,13 @@ export default function RunAgent() {
                             {/* Education */}
                             {currentTask.result.resume_structured.education && (
                               <div>
-                                <p className="font-medium text-teal-700 dark:text-teal-300 flex items-center">
+                                <p className="font-medium text-slate-700 dark:text-slate-300 flex items-center">
                                   <GraduationCap className="h-4 w-4 mr-1" /> Education
                                 </p>
                                 {currentTask.result.resume_structured.education.map((edu: any, index: number) => (
                                   <div key={index} className="text-xs mt-1">
-                                    <p className="text-teal-600 dark:text-teal-400">{edu.degree}</p>
-                                    <p className="text-teal-500 dark:text-teal-500">{edu.institution}</p>
+                                    <p className="text-slate-600 dark:text-slate-400">{edu.degree}</p>
+                                    <p className="text-slate-700 dark:text-slate-300">{edu.institution}</p>
                                     <p className="text-teal-500/70 dark:text-teal-500/70">{edu.start_year} - {edu.end_year}</p>
                                   </div>
                                 ))}
@@ -897,13 +900,13 @@ export default function RunAgent() {
                                 <Briefcase className="h-4 w-4 mr-1" /> Experience
                               </p>
                               {currentTask.result.resume_structured.experience.map((exp: any, index: number) => (
-                                <div key={index} className="text-xs mt-2 pb-2 border-b border-teal-100 dark:border-teal-800/30 last:border-0">
-                                  <p className="text-teal-600 dark:text-teal-400 font-medium">{exp.title}</p>
-                                  <p className="text-teal-500 dark:text-teal-500">{exp.company}</p>
+                                <div key={index} className="text-xs mt-2 pb-2 border-b border-slate-200 dark:border-slate-700/30 last:border-0">
+                                  <p className="text-slate-600 dark:text-slate-400 font-medium">{exp.title}</p>
+                                  <p className="text-slate-700 dark:text-slate-300">{exp.company}</p>
                                   <p className="text-teal-500/70 dark:text-teal-500/70">
                                     {exp.start_date} - {exp.end_date || 'Present'}
                                   </p>
-                                  <p className="text-teal-600 dark:text-teal-400 mt-1">{exp.description}</p>
+                                  <p className="text-slate-600 dark:text-slate-400 mt-1">{exp.description}</p>
                                 </div>
                               ))}
                             </div>
@@ -915,10 +918,10 @@ export default function RunAgent() {
                     {/* Job Description Analysis */}
                     {currentTask.result.jd_structured && (
                       <div className="mb-4">
-                        <h4 className="text-md font-medium text-teal-700 dark:text-teal-300 mb-2 flex items-center">
+                        <h4 className="text-md font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center">
                           <Briefcase className="h-4 w-4 mr-2" /> Job Description Analysis
                         </h4>
-                        <div className="bg-white dark:bg-teal-900/30 rounded-md p-3 text-sm">
+                        <div className="bg-white dark:bg-slate-900/30 rounded-md p-3 text-sm">
                           <p className="font-medium text-teal-700 dark:text-teal-300">
                             {currentTask.result.jd_structured.title}
                           </p>
@@ -931,10 +934,10 @@ export default function RunAgent() {
                           {/* Top Skills */}
                           {currentTask.result.jd_structured.top_skills && (
                             <div className="mt-3">
-                              <p className="text-teal-700 dark:text-teal-300 text-xs font-medium">Top Skills:</p>
+                              <p className="text-slate-700 dark:text-slate-300 text-xs font-medium">Top Skills:</p>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {currentTask.result.jd_structured.top_skills.map((skill: string, index: number) => (
-                                  <Badge key={index} variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/30 dark:text-teal-300 dark:border-teal-700/50">
+                                  <Badge key={index} variant="outline" className="bg-slate-50 text-teal-700 border-slate-200 dark:bg-slate-900/30 dark:text-teal-300 dark:border-slate-700/50">
                                     {skill}
                                   </Badge>
                                 ))}
@@ -945,8 +948,8 @@ export default function RunAgent() {
                           {/* Responsibilities */}
                           {currentTask.result.jd_structured.responsibilities && (
                             <div className="mt-3">
-                              <p className="text-teal-700 dark:text-teal-300 text-xs font-medium">Responsibilities:</p>
-                              <ul className="list-disc list-inside text-xs text-teal-600 dark:text-teal-400 mt-1 pl-2">
+                              <p className="text-slate-700 dark:text-slate-300 text-xs font-medium">Responsibilities:</p>
+                              <ul className="list-disc list-inside text-xs text-slate-600 dark:text-slate-400 mt-1 pl-2">
                                 {currentTask.result.jd_structured.responsibilities.map((resp: string, index: number) => (
                                   <li key={index} className="mt-1">{resp}</li>
                                 ))}
@@ -957,8 +960,8 @@ export default function RunAgent() {
                           {/* Required Qualifications */}
                           {currentTask.result.jd_structured.required_qualifications && (
                             <div className="mt-3">
-                              <p className="text-teal-700 dark:text-teal-300 text-xs font-medium">Required Qualifications:</p>
-                              <ul className="list-disc list-inside text-xs text-teal-600 dark:text-teal-400 mt-1 pl-2">
+                              <p className="text-slate-700 dark:text-slate-300 text-xs font-medium">Required Qualifications:</p>
+                              <ul className="list-disc list-inside text-xs text-slate-600 dark:text-slate-400 mt-1 pl-2">
                                 {currentTask.result.jd_structured.required_qualifications.map((qual: string, index: number) => (
                                   <li key={index} className="mt-1">{qual}</li>
                                 ))}
@@ -977,7 +980,7 @@ export default function RunAgent() {
                 
                 {/* Show error when task fails */}
                 {currentTask.status === 'failed' && currentTask.error && (
-                  <div className="mt-4 border-t border-red-200 pt-4">
+                  <div className="mt-4 border-t border-red-200 dark:border-red-800/50 pt-4">
                     <div className="bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 p-3 rounded-md text-sm">
                       <h3 className="font-medium">Error</h3>
                       <p className="mt-1">{currentTask.error}</p>
