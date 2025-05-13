@@ -69,7 +69,7 @@ const RandomProgressBar = ({ status }: RandomProgressBarProps) => {
   };
   
   return (
-    <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+    <div className="w-full bg-teal-200 dark:bg-teal-800 rounded-full h-1.5 overflow-hidden">
       <div 
         className={`h-full ${getColorClass()} transition-all duration-500 ease-out`}
         style={{ width: `${progress}%` }}
@@ -128,7 +128,7 @@ export default function RunAgent() {
       case "running":
         return "AI is analyzing the resume and job description...";
       case "completed":
-        return "Analysis completed! Redirecting to results...";
+        return "Analysis completed!";
       case "failed":
         return `Error: ${currentTask.error || "Unknown error occurred"}`;  
       case "retrying":
@@ -649,7 +649,7 @@ export default function RunAgent() {
             
             {/* Task Status Display */}
             {currentTask && (
-              <div className="mt-4 p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+              <div className="mt-4 p-4 border border-slate-200 dark:border-slate-700 rounded-lg">
                 <div className="flex items-center">
                   {/* Use type assertion to handle the 'retrying' status */}
                   {(currentTask.status as string) === 'completed' ? (
@@ -661,17 +661,17 @@ export default function RunAgent() {
                   ) : (
                     <Loader2 className="mr-2 h-5 w-5 text-teal-500 animate-spin" />
                   )}
-                  <div className={`font-medium text-slate-800 dark:text-slate-200 ${getStatusColorClass()}`}>
+                  <div className={`font-medium text-teal-800 dark:text-teal-200 ${getStatusColorClass()}`}>
                     Task Status: {(currentTask.status as string).charAt(0).toUpperCase() + (currentTask.status as string).slice(1)}
                   </div>
                 </div>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{getStatusMessage()}</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Task ID: {currentTask.task_id}</p>
+                <p className="mt-2 text-sm text-teal-600 dark:text-teal-300">{getStatusMessage()}</p>
+                <p className="mt-1 text-xs text-teal-500 dark:text-teal-400">Task ID: {currentTask.task_id}</p>
                 
                 {/* Show additional info for retrying state */}
                 {(currentTask.status as string) === 'retrying' && (
                   <div className="mt-2 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded border border-amber-200 dark:border-amber-800">
-                    <p>Network issue detected. Automatically retrying connection to the server...</p>
+                    <p>Please wait patiently. Agent is analyzing the candidate on multiple parameters...</p>
                   </div>
                 )}
                 
@@ -697,13 +697,13 @@ export default function RunAgent() {
 
                     {/* Fit Assessment - Highlighted */}
                     {currentTask.result.fit_assessment && (
-                      <div className="mb-4 border-2 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/20 rounded-lg shadow-md overflow-hidden">
-                        <div className="bg-slate-100 dark:bg-slate-800/30 px-4 py-3">
-                          <h4 className="text-md font-medium text-slate-800 dark:text-slate-200 flex items-center">
+                      <div className="mb-4 border-2 border-slate-200 dark:border-slate-700 bg-teal-50/50 dark:bg-teal-900/20 rounded-lg shadow-md overflow-hidden">
+                        <div className="bg-teal-100 dark:bg-teal-800/30 px-4 py-3">
+                          <h4 className="text-md font-medium text-teal-800 dark:text-teal-200 flex items-center">
                             <Award className="h-5 w-5 mr-2 text-teal-600 dark:text-teal-400" /> 
                             Candidate Fit Assessment
                           </h4>
-                          <p className="text-sm text-slate-600 dark:text-slate-300">
+                          <p className="text-sm text-teal-600 dark:text-teal-300">
                             {currentTask.result.fit_assessment.fit_score || 
                               (currentTask.result.fit_assessment.score_details?.skill_match_percentage >= 80 ? "Strong Fit" : 
                                currentTask.result.fit_assessment.score_details?.skill_match_percentage >= 60 ? "Moderate Fit" : "Low Fit")}
@@ -720,7 +720,7 @@ export default function RunAgent() {
                                   {currentTask.result.fit_assessment.score_details.skill_match_percentage}%
                                 </span>
                               </div>
-                              <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2.5">
+                              <div className="w-full bg-teal-200 dark:bg-teal-800 rounded-full h-2.5">
                                 <div 
                                   className={`h-2.5 rounded-full ${getScoreColorClass(currentTask.result.fit_assessment.score_details.skill_match_percentage)}`} 
                                   style={{ width: `${currentTask.result.fit_assessment.score_details.skill_match_percentage}%` }}
@@ -759,7 +759,7 @@ export default function RunAgent() {
                           {currentTask.result.fit_assessment.comparison_matrix && (
                             <div className="mb-4">
                               <h5 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Skills Assessment</h5>
-                              <div className="bg-white dark:bg-slate-900/40 rounded-md p-3 overflow-auto max-h-64">
+                              <div className="bg-white dark:bg-teal-900/40 rounded-md p-3 overflow-auto max-h-64">
                                 <table className="w-full text-sm">
                                   <thead>
                                     <tr className="border-b border-teal-100 dark:border-teal-800/30">
@@ -792,7 +792,7 @@ export default function RunAgent() {
                             {currentTask.result.fit_assessment.strengths && (
                               <div>
                                 <h5 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Strengths</h5>
-                                <ul className="space-y-1 bg-white dark:bg-slate-900/40 rounded-md p-3">
+                                <ul className="space-y-1 bg-white dark:bg-teal-900/40 rounded-md p-3">
                                   {currentTask.result.fit_assessment.strengths.map((strength: string, index: number) => (
                                     <li key={index} className="text-xs flex items-start">
                                       <div className="mr-2 mt-0.5 text-green-500 flex-shrink-0">
@@ -809,7 +809,7 @@ export default function RunAgent() {
                             {currentTask.result.fit_assessment.gaps && (
                               <div>
                                 <h5 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Improvement Areas</h5>
-                                <ul className="space-y-1 bg-white dark:bg-slate-900/40 rounded-md p-3">
+                                <ul className="space-y-1 bg-white dark:bg-teal-900/40 rounded-md p-3">
                                   {currentTask.result.fit_assessment.gaps.map((gap: string, index: number) => (
                                     <li key={index} className="text-xs flex items-start">
                                       <div className="mr-2 mt-0.5 text-red-500 flex-shrink-0">
@@ -856,7 +856,7 @@ export default function RunAgent() {
                         <h4 className="text-md font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center">
                           <User className="h-4 w-4 mr-2" /> Resume Analysis
                         </h4>
-                        <div className="bg-white dark:bg-slate-900/30 rounded-md p-3 text-sm">
+                        <div className="bg-white dark:bg-teal-900/30 rounded-md p-3 text-sm">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {/* Personal Info */}
                             {currentTask.result.resume_structured.personal && (
@@ -921,7 +921,7 @@ export default function RunAgent() {
                         <h4 className="text-md font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center">
                           <Briefcase className="h-4 w-4 mr-2" /> Job Description Analysis
                         </h4>
-                        <div className="bg-white dark:bg-slate-900/30 rounded-md p-3 text-sm">
+                        <div className="bg-white dark:bg-teal-900/30 rounded-md p-3 text-sm">
                           <p className="font-medium text-teal-700 dark:text-teal-300">
                             {currentTask.result.jd_structured.title}
                           </p>
@@ -937,7 +937,7 @@ export default function RunAgent() {
                               <p className="text-slate-700 dark:text-slate-300 text-xs font-medium">Top Skills:</p>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {currentTask.result.jd_structured.top_skills.map((skill: string, index: number) => (
-                                  <Badge key={index} variant="outline" className="bg-slate-50 text-teal-700 border-slate-200 dark:bg-slate-900/30 dark:text-teal-300 dark:border-slate-700/50">
+                                  <Badge key={index} variant="outline" className="bg-teal-50 text-teal-700 border-slate-200 dark:bg-teal-900/30 dark:text-teal-300 dark:border-slate-700/50">
                                     {skill}
                                   </Badge>
                                 ))}
