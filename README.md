@@ -2,6 +2,8 @@
 
 A modern recruiting assistant that analyzes job descriptions and candidate resumes, providing detailed fit assessments with background task processing. Features a FastAPI backend and React frontend with real-time task status updates.
 
+[Live Demo](https://recruiter.sleebit.com)
+
 ![Dashboard](backend/tmp/graph.png)
 
 ---
